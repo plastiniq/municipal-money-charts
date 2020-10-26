@@ -1,0 +1,20 @@
+@import '~c3/c3.css';
+
+.c3-axis-y path, .c3-axis-y line {
+    display: none;
+}
+
+.c3-axis-x path, .c3-axis-x line {
+    display: none;
+}
+
+.c3-ygrid-lines g {
+    stroke-dasharray: none
+}
+
+.c3-ygrid-lines {
+    stroke-dasharray: none
+}
+
+
+
