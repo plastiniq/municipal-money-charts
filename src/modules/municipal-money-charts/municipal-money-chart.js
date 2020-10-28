@@ -58,9 +58,10 @@ const muniMoneyChart = (container, initialMuni, period) => {
 
 
 
-const loadData = (compareMuni) => {
+const loadData = (compareMuni, removeSeriesIds) => {
     chart.load({
-        columns: [compareMuni]
+        columns: [compareMuni],
+        unload: removeSeriesIds 
     });
 
 }

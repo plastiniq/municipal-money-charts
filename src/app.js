@@ -8,6 +8,7 @@ let munis = []
 let selectedMuni = {}
 let compareMunis = []
 let selectedCompareMunis = []
+let removeSeriesIds = []
 
 let cut = $('#cut').val()
 let startYear = $('#startYear').val()
@@ -66,8 +67,6 @@ function selectMuni() {
 
                 selectedMuni.data = selectedMuniData;
 
-               
-
                 muniMoneyChart('#muniMoneyChart',
                     [selectedMuni["municipality.name"],
                         selectedMuni.data[0].amount,
@@ -114,7 +113,7 @@ function compareSpecificMunis() {
                 specificMuni.data[0].amount,
                 specificMuni.data[1].amount,
                 specificMuni.data[2].amount
-            ])
+            ],removeSeriesIds)
 
             $('.compareMuni').on('click', function () { 
                 removeSpecificMuni($(this).text())
@@ -178,7 +177,7 @@ function compareMuni() {
                     selectedCompareMunis[index].data[0].amount,
                     selectedCompareMunis[index].data[1].amount,
                     selectedCompareMunis[index].data[2].amount
-                ])
+                ],removeSeriesIds)
             })
         })
     }
@@ -187,16 +186,11 @@ function compareMuni() {
 function resetComparisons() {
     $('#selectedMunis .compareMuni').remove();
 
-    let compareSeriesIds = []
+    removeSeriesIds = []
 
     _.forEach(selectedCompareMunis, function(muni) {
-        console.log(muni)
-        compareSeriesIds.push(muni["municipality.name"])
+        removeSeriesIds.push(muni["municipality.name"])
     })
-
-    if(compareSeriesIds.length > 0) {
-        unloadData(compareSeriesIds)
-    }
 
     selectedCompareMunis = []
     compareMunis = []
