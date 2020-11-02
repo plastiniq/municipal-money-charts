@@ -32,9 +32,6 @@ let chart = {}
 
 const muniMoneyChart = (container, initialMuni, period) => {
 
-
-    console.log(initialMuni)
-
     chart = c3.generate({
         bindto: container,
         color : {
@@ -75,6 +72,9 @@ const muniMoneyChart = (container, initialMuni, period) => {
         },
         tooltip: {
             grouped: false,
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+                return '<div class="tooltip"><span class="tooltipName">' + d[0].name + '</span><br/><span class="tooltipValue">' + formatRand(d[0].value, 0, ' ') + '</span></div>'
+            }
         }
     });
 }
@@ -82,14 +82,13 @@ const muniMoneyChart = (container, initialMuni, period) => {
 
 const loadData = (compareMuni, removeSeriesIds) => {
     chart.load({
-        columns: [compareMuni],
-        unload: removeSeriesIds 
+        columns: [compareMuni]
+        
     });
 
 }
 
 const unloadData = (series) => {
-    console.log(series);
     chart.unload({
         ids: series
     })

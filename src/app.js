@@ -17,15 +17,9 @@ let startYear = $('#startYear').val()
 
 $('#muniSelect').on('change', function() { selectMuni() } );
 $('#muniCompareSelect').on('change', function () { compareMuni() });
-$('#toggleCut').on('click', function() {
-    $('.cutOptions').toggle()
-})
-$('#cut').on('blue', function() {
-    cut = $(this).val()
-})
-$('#startYear').on('blue', function() {
-    startYear = $(this).val()
-})
+$('#toggleCut').on('click', function() { $('.cutOptions').toggle() })
+$('#cut').on('blue', function() { cut = $(this).val() })
+$('#startYear').on('blue', function() { startYear = $(this).val() })
 
 
 /* GET THE MUNIS */
@@ -68,7 +62,7 @@ function selectMuni() {
                 selectedMuni.data = selectedMuniData;
 
                 muniMoneyChart('#muniMoneyChart',
-                    [selectedMuni["municipality.name"],
+                    [selectedMuni["municipality.demarcation_code"],
                         selectedMuni.data[0].amount,
                         selectedMuni.data[1].amount,
                         selectedMuni.data[2].amount
@@ -79,7 +73,7 @@ function selectMuni() {
                     ]
                 )
 
-                $('#selectedMunis').append('<div class="muni initialMuni">' + selectedMuni["municipality.name"] + '</div>')
+                $('#selectedMunis').append('<div class="muni initialMuni">' + selectedMuni["municipality.name"] + ' <span class="demarcartionCode">(' + selectedMuni['municipality.demarcation_code'] +')</span></div>')
 
                 $('#muniSelect').val('') 
 
@@ -105,7 +99,7 @@ function compareSpecificMunis() {
 
             selectedCompareMunis.push(specificMuni);
             
-            $('#selectedMunis').append('<div class="muni compareMuni">' + specificMuni["municipality.name"] + '</div>')
+            $('#selectedMunis').append('<div class="muni compareMuni">' + specificMuni["municipality.name"] + ' <span class="demarcartionCode">(' + specificMuni['municipality.demarcation_code'] +')</span></div>')
 
             $('#muniSelect').val('') 
 
@@ -137,7 +131,9 @@ function compareMuni() {
     resetComparisons()
 
     if($('#muniCompareSelect').val() == 'specific') {} 
-    else if($('#muniCompareSelect').val() == '') {}
+    else if($('#muniCompareSelect').val() == '') {
+        resetComparisons(true)
+    }
     else {
         let oKey = null;
         
@@ -161,7 +157,7 @@ function compareMuni() {
 
             selectedCompareMunis[index].data = []
 
-            $('#selectedMunis').append('<div class="muni compareMuni">' + selectedCompareMunis[index]["municipality.name"] + '</div>')
+            $('#selectedMunis').append('<div class="muni compareMuni">' + selectedCompareMunis[index]["municipality.name"] + ' <span class="demarcartionCode">(' + selectedCompareMunis[index]['municipality.demarcation_code'] +')</span></div>')
             
             $.ajax({
                 url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + compareMuni["municipality.demarcation_code"] + '"' + cut
@@ -173,7 +169,7 @@ function compareMuni() {
 
                 selectedCompareMunis[index].data = compareMuniData;
 
-                loadData([selectedCompareMunis[index]["municipality.name"],
+                loadData([selectedCompareMunis[index]["municipality.demarcation_code"],
                     selectedCompareMunis[index].data[0].amount,
                     selectedCompareMunis[index].data[1].amount,
                     selectedCompareMunis[index].data[2].amount
@@ -183,14 +179,19 @@ function compareMuni() {
     }
 }
 
-function resetComparisons() {
+function resetComparisons(unload = false) {
     $('#selectedMunis .compareMuni').remove();
 
     removeSeriesIds = []
 
     _.forEach(selectedCompareMunis, function(muni) {
-        removeSeriesIds.push(muni["municipality.name"])
+        // console.log(muni);
+        removeSeriesIds.push(muni["municipality.demarcation_code"])
     })
+
+    // if(unload == true) {
+        unloadData(removeSeriesIds)
+    // }
 
     selectedCompareMunis = []
     compareMunis = []
