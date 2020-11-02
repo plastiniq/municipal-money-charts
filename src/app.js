@@ -1,5 +1,5 @@
 import { muniMoneyChart, loadData, unloadData } from './modules/municipal-money-charts/municipal-money-chart';
-import $ from 'jQuery'
+import $ from 'jquery'
 import _ from 'lodash'
 
 let apiUrl = 'https://municipaldata.treasury.gov.za/api/cubes'
