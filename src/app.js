@@ -22,8 +22,6 @@ $('#cut').on('blue', function() { cut = $(this).val() })
 $('#startYear').on('blue', function() { startYear = $(this).val() })
 
 
-/* GET THE MUNIS */
-
 $.ajax({
     url : apiUrl + '/municipalities/facts',
 }).done(function (data) {
@@ -83,37 +81,37 @@ function selectMuni() {
 }
 
 function compareSpecificMunis() {
+
     
     if(selectedCompareMunis.length < 3) {
-        
-        if(selectedMuni != $('#muniSelect').val() && _.findIndex(selectedCompareMunis, function(o) { o[0] == $('#muniSelect').val() }) == -1) {
+
+        if($('#muniSelect').val() != selectedMuni["municipality.demarcation_code"]  && _.findIndex(selectedCompareMunis, function(o) { o[0] == $('#muniSelect').val() }) == -1) {
 
             $.ajax({
                 url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + $('#muniSelect').val() + '"' + cut
             }).done(function (data) {
 
-                let specificMuni = _.find(munis, function(o) { return o["municipality.demarcation_code"] == $('#muniSelect').val(); });
+                let specificMuniTemp = _.find(munis, function(o) { return o["municipality.demarcation_code"] == $('#muniSelect').val(); });
 
                 let specificMuniData = _.filter(data.data, function (o) {
                     return o["financial_period.period"] > 2016;
                 });
 
-                specificMuni.data = specificMuniData;
-
-                selectedCompareMunis.push(specificMuni);
+                let specificMuni = [specificMuniTemp["municipality.demarcation_code"],
+                    specificMuniData[0].amount,
+                    specificMuniData[1].amount,
+                    specificMuniData[2].amount
+                ]
                 
-                $('#selectedMunis').append('<div class="muni compareMuni">' + specificMuni["municipality.name"] + ' <span class="demarcartionCode">(' + specificMuni['municipality.demarcation_code'] +')</span></div>')
+                $('#selectedMunis').append('<div class="muni compareMuni" data-demarcation-code="' + specificMuniTemp['municipality.demarcation_code'] + '">' + specificMuniTemp["municipality.name"] + ' <span class="demarcartionCode">(' + specificMuniTemp['municipality.demarcation_code'] +')</span></div>')
 
                 $('#muniSelect').val('') 
 
-                loadData([specificMuni["municipality.name"],
-                    specificMuni.data[0].amount,
-                    specificMuni.data[1].amount,
-                    specificMuni.data[2].amount
-                ],removeSeriesIds)
+
+                loadData([specificMuni],removeSeriesIds)
 
                 $('.compareMuni').on('click', function () { 
-                    removeSpecificMuni($(this).text())
+                    removeSpecificMuni($(this).attr('data-demarcation-code'))
                     $(this).remove();
                 })
             })
