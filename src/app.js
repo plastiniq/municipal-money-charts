@@ -83,37 +83,42 @@ function selectMuni() {
 }
 
 function compareSpecificMunis() {
+    
     if(selectedCompareMunis.length < 3) {
+        
+        if(selectedMuni != $('#muniSelect').val() && _.findIndex(selectedCompareMunis, function(o) { o[0] == $('#muniSelect').val() }) == -1) {
 
-        $.ajax({
-            url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + $('#muniSelect').val() + '"' + cut
-        }).done(function (data) {
+            $.ajax({
+                url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + $('#muniSelect').val() + '"' + cut
+            }).done(function (data) {
 
-            let specificMuni = _.find(munis, function(o) { return o["municipality.demarcation_code"] == $('#muniSelect').val(); });
+                let specificMuni = _.find(munis, function(o) { return o["municipality.demarcation_code"] == $('#muniSelect').val(); });
 
-            let specificMuniData = _.filter(data.data, function (o) {
-                return o["financial_period.period"] > 2016;
-            });
+                let specificMuniData = _.filter(data.data, function (o) {
+                    return o["financial_period.period"] > 2016;
+                });
 
-            specificMuni.data = specificMuniData;
+                specificMuni.data = specificMuniData;
 
-            selectedCompareMunis.push(specificMuni);
-            
-            $('#selectedMunis').append('<div class="muni compareMuni">' + specificMuni["municipality.name"] + ' <span class="demarcartionCode">(' + specificMuni['municipality.demarcation_code'] +')</span></div>')
+                selectedCompareMunis.push(specificMuni);
+                
+                $('#selectedMunis').append('<div class="muni compareMuni">' + specificMuni["municipality.name"] + ' <span class="demarcartionCode">(' + specificMuni['municipality.demarcation_code'] +')</span></div>')
 
-            $('#muniSelect').val('') 
+                $('#muniSelect').val('') 
 
-            loadData([specificMuni["municipality.name"],
-                specificMuni.data[0].amount,
-                specificMuni.data[1].amount,
-                specificMuni.data[2].amount
-            ],removeSeriesIds)
+                loadData([specificMuni["municipality.name"],
+                    specificMuni.data[0].amount,
+                    specificMuni.data[1].amount,
+                    specificMuni.data[2].amount
+                ],removeSeriesIds)
 
-            $('.compareMuni').on('click', function () { 
-                removeSpecificMuni($(this).text())
-                $(this).remove();
+                $('.compareMuni').on('click', function () { 
+                    removeSpecificMuni($(this).text())
+                    $(this).remove();
+                })
             })
-        })
+
+        }
     }
 }
 
@@ -122,19 +127,21 @@ function removeSpecificMuni(muni) {
     selectedCompareMunis = _.remove(selectedCompareMunis, function(muni) {
         return muni["municipality.name"] == muni
     })
-    unloadData(muni)
+    unloadData([muni])
 
 }
 
 function compareMuni() {
 
-    resetComparisons()
-
-    if($('#muniCompareSelect').val() == 'specific') {} 
+    if($('#muniCompareSelect').val() == 'specific') {
+        resetComparisons(true)
+    } 
     else if($('#muniCompareSelect').val() == '') {
         resetComparisons(true)
     }
     else {
+        resetComparisons()
+
         let oKey = null;
         
         if($('#muniCompareSelect').val() == 'national') {
@@ -147,33 +154,34 @@ function compareMuni() {
             oKey = "municipality.parent_code"
         }
 
-         compareMunis = _.filter(munis, function (o) {
+        compareMunis = _.filter(munis, function (o) {
             return o[oKey] == selectedMuni[oKey] && o["municipality.demarcation_code"] != selectedMuni["municipality.demarcation_code"];
         })
         
-        selectedCompareMunis = _.sampleSize(compareMunis, 3);
+        let selectedCompareMunisSample = _.sampleSize(compareMunis, 3);
 
-        _.forEach(selectedCompareMunis, function(compareMuni, index) {
+        _.forEach(selectedCompareMunisSample, function(compareMuni, index) {
 
-            selectedCompareMunis[index].data = []
-
-            $('#selectedMunis').append('<div class="muni compareMuni">' + selectedCompareMunis[index]["municipality.name"] + ' <span class="demarcartionCode">(' + selectedCompareMunis[index]['municipality.demarcation_code'] +')</span></div>')
+            $('#selectedMunis').append('<div class="muni compareMuni">' + compareMuni["municipality.name"] + ' <span class="demarcartionCode">(' + compareMuni['municipality.demarcation_code'] +')</span></div>')
             
             $.ajax({
                 url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + compareMuni["municipality.demarcation_code"] + '"' + cut
             }).done(function (data) {
 
                 let compareMuniData = _.filter(data.data, function (o) {
-                    return o["financial_period.period"] > 2016;
+                    return o["financial_period.period"] > startYear;
                 })
 
-                selectedCompareMunis[index].data = compareMuniData;
+                selectedCompareMunis.push([compareMuni["municipality.demarcation_code"],
+                    compareMuniData[0].amount,
+                    compareMuniData[1].amount,
+                    compareMuniData[2].amount
+                ])
+                
+                if(index == selectedCompareMunisSample.length -1) {
+                    loadData(selectedCompareMunis, removeSeriesIds)
+                }
 
-                loadData([selectedCompareMunis[index]["municipality.demarcation_code"],
-                    selectedCompareMunis[index].data[0].amount,
-                    selectedCompareMunis[index].data[1].amount,
-                    selectedCompareMunis[index].data[2].amount
-                ],removeSeriesIds)
             })
         })
     }
@@ -185,13 +193,12 @@ function resetComparisons(unload = false) {
     removeSeriesIds = []
 
     _.forEach(selectedCompareMunis, function(muni) {
-        // console.log(muni);
-        removeSeriesIds.push(muni["municipality.demarcation_code"])
+        removeSeriesIds.push(muni[0])
     })
 
-    // if(unload == true) {
+    if(unload == true) {
         unloadData(removeSeriesIds)
-    // }
+    }
 
     selectedCompareMunis = []
     compareMunis = []

@@ -31,11 +31,10 @@ const humaniseRand = (x, longForm) => { // eslint-disable-line import/prefer-def
 let chart = {}
 
 const muniMoneyChart = (container, initialMuni, period) => {
-
     chart = c3.generate({
         bindto: container,
         color : {
-            pattern : ['#34a853', '#dadada', '#adadad', '#dadada', '#adadad']
+            pattern : ['#34a853', '#dadada', '#adadad', '#dadada', '#adadad', '#dadada', '#adadad', '#dadada', '#adadad', '#dadada', '#adadad']
         },
         legend: {
             show: false
@@ -80,17 +79,19 @@ const muniMoneyChart = (container, initialMuni, period) => {
 }
 
 
-const loadData = (compareMuni, removeSeriesIds) => {
+const loadData = (compareMunis, removeSeriesIds) => {
+    
     chart.load({
-        columns: [compareMuni]
-        
-    });
+        unload: removeSeriesIds,
+        columns: compareMunis
+    })
+    console.log(chart.data)
 
 }
 
-const unloadData = (series) => {
+const unloadData = (removeSeriesIds) => {
     chart.unload({
-        ids: series
+        ids: removeSeriesIds
     })
 }
 
