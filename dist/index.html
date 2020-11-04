@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Municipal Money Charts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         * {
             box-sizing: border-box;
@@ -21,6 +22,25 @@
             background: #ccc;
             font-size: 1em;
             border: none;
+        }
+
+        .select2 {
+            padding: 0.55em;
+            border-radius: 5px;
+            background: #ccc;
+            font-size: 1em;
+            border: none;
+        }
+
+        .select2-container--default,
+        .select2-selection--single {
+            background-color: #ccc !important;
+            border: none !important            
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100% !important;
+
         }
 
         input {
@@ -54,6 +74,18 @@
 
         #selectedMunis .compareMuni {
             cursor: pointer
+        }
+
+        #reloadBtn {
+            width:24px;
+            height:24px;
+            position: relative;
+            top: 0.5em;
+            cursor: pointer
+        }
+
+        #reloadBtn:hover {
+            transform: scale(1.2)
         }
 
         #muniMoneyChart {
@@ -100,6 +132,9 @@
             <div id="selectedMunis"></div>
         </div>
         <div class="col">
+            <svg id="reloadBtn" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
+            </svg>
             <select id="muniCompareSelect">
                 <option value="">Don't compare</option>
                 <option value="nearby">Similar nearby</option>

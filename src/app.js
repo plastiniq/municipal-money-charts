@@ -1,6 +1,7 @@
 import { muniMoneyChart, loadData, unloadData } from './modules/municipal-money-charts/municipal-money-chart';
 import $ from 'jquery'
 import _ from 'lodash'
+import select2 from 'select2'
 
 let apiUrl = 'https://municipaldata.treasury.gov.za/api/cubes'
 
@@ -20,15 +21,22 @@ $('#muniCompareSelect').on('change', function () { compareMuni() });
 $('#toggleCut').on('click', function() { $('.cutOptions').toggle() })
 $('#cut').on('blue', function() { cut = $(this).val() })
 $('#startYear').on('blue', function() { startYear = $(this).val() })
-
+$('#reloadBtn').on('click', function() { reloadSelection() })
 
 $.ajax({
     url : apiUrl + '/municipalities/facts',
 }).done(function (data) {
     munis = data.data;
+
+    munis = _.orderBy(munis, ['municipality.name'], ['asc']);
+    
+
     munis.forEach(function (muni, i) {
         $('#muniSelect').append('<option value="' + muni["municipality.demarcation_code"] + '">' + muni["municipality.name"] + '</option>')
     });
+    $(document).ready(function() {
+        $('#muniSelect').select2();
+    })
 });
 
 
@@ -183,6 +191,10 @@ function compareMuni() {
             })
         })
     }
+}
+
+function reloadSelection() {
+    compareMuni()
 }
 
 function resetComparisons(unload = false) {
