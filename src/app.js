@@ -29,7 +29,6 @@ $.ajax({
     munis = data.data;
 
     munis = _.orderBy(munis, ['municipality.name'], ['asc']);
-    
 
     munis.forEach(function (muni, i) {
         $('#muniSelect').append('<option value="' + muni["municipality.demarcation_code"] + '">' + muni["municipality.name"] + '</option>')
@@ -56,7 +55,7 @@ function selectMuni() {
             $('.initialMuni').remove()
             
             $.ajax({
-                url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + $('#muniSelect').val() + '"' + cut
+                url: apiUrl + '/bsheet/facts?cut=demarcation.code:"' + $('#muniSelect').val() + '"' + cut
             }).done(function (data) {
 
                 selectedMuni = _.find(munis, function(o) { return o["municipality.demarcation_code"] == $('#muniSelect').val(); });
@@ -83,6 +82,15 @@ function selectMuni() {
 
                 $('#muniSelect').val('') 
 
+                if(selectedMuni["municipality.category"] == 'A') {
+                    $('#muniCompareSelect option[value="nearby"]').attr('disabled', true)
+                    $('#muniCompareSelect option[value="province"]').attr('disabled', true)
+                    $('#muniCompareSelect option[value="specific"]').attr('disabled', true)
+                } else {
+                    $('#muniCompareSelect option').attr('disabled', false)
+                }
+                
+
             })
         }
     }
@@ -96,7 +104,7 @@ function compareSpecificMunis() {
         if($('#muniSelect').val() != selectedMuni["municipality.demarcation_code"]  && _.findIndex(selectedCompareMunis, function(o) { o[0] == $('#muniSelect').val() }) == -1) {
 
             $.ajax({
-                url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + $('#muniSelect').val() + '"' + cut
+                url: apiUrl + '/bsheet/facts?cut=demarcation.code:"' + $('#muniSelect').val() + '"' + cut
             }).done(function (data) {
 
                 let specificMuniTemp = _.find(munis, function(o) { return o["municipality.demarcation_code"] == $('#muniSelect').val(); });
@@ -148,20 +156,23 @@ function compareMuni() {
     else {
         resetComparisons()
 
-        let oKey = null;
+        let aKey = null;
+        let bKey = null;
         
         if($('#muniCompareSelect').val() == 'national') {
-            oKey = "municipality.miif_category"
+            aKey = "municipality.miif_category"
         }
         else if($('#muniCompareSelect').val() == 'province') {
-            oKey = "municipality.province_code"
+            aKey = "municipality.province_code"
+            bKey = "municipality.miif_category"
         }
         else if($('#muniCompareSelect').val() == 'nearby') {
-            oKey = "municipality.parent_code"
+            aKey = "municipality.parent_code"
+            bKey = "municipality.miif_category"
         }
 
         compareMunis = _.filter(munis, function (o) {
-            return o[oKey] == selectedMuni[oKey] && o["municipality.demarcation_code"] != selectedMuni["municipality.demarcation_code"];
+            return o[aKey] == selectedMuni[aKey] && o[bKey] == selectedMuni[bKey] && o["municipality.demarcation_code"] != selectedMuni["municipality.demarcation_code"];
         })
         
         let selectedCompareMunisSample = _.sampleSize(compareMunis, 3);
@@ -171,7 +182,7 @@ function compareMuni() {
             $('#selectedMunis').append('<div class="muni compareMuni">' + compareMuni["municipality.name"] + ' <span class="demarcartionCode">(' + compareMuni['municipality.demarcation_code'] +')</span></div>')
             
             $.ajax({
-                url: apiUrl + '/cflow/facts?cut=demarcation.code:"' + compareMuni["municipality.demarcation_code"] + '"' + cut
+                url: apiUrl + '/bsheet/facts?cut=demarcation.code:"' + compareMuni["municipality.demarcation_code"] + '"' + cut
             }).done(function (data) {
 
                 let compareMuniData = _.filter(data.data, function (o) {

@@ -2,7 +2,9 @@ import c3 from 'c3'
 import './municipal-money-charts.scss'
 import * as d3format from 'd3-format'
 import * as d3selection from 'd3-selection'
+import * as d3array from 'd3-array'
 import { getBBox } from 'bbox'
+
 
 const formatRand = (x, decimals, randSpace) => {
     decimals = decimals === undefined ? 1 : decimals; 
@@ -117,24 +119,26 @@ const addMedians = () => {
     medians.push(
         [
             [paths._groups[0][0].getBBox().x, paths._groups[0][9].getBBox().x + paths._groups[0][9].getBBox().width],
-            median([paths._groups[0][0].getBBox().height, paths._groups[0][3].getBBox().height, paths._groups[0][6].getBBox().height, paths._groups[0][9].getBBox().height])
+            d3array.median([paths._groups[0][0].getBBox(), paths._groups[0][3].getBBox(), paths._groups[0][6].getBBox(), paths._groups[0][9].getBBox()], d => d.height)
         ],
         [
             [paths._groups[0][1].getBBox().x, paths._groups[0][10].getBBox().x + paths._groups[0][10].getBBox().width],
-            median([paths._groups[0][1].getBBox().height, paths._groups[0][4].getBBox().height, paths._groups[0][7].getBBox().height, paths._groups[0][10].getBBox().height])
+            d3array.median([paths._groups[0][1].getBBox(), paths._groups[0][4].getBBox(), paths._groups[0][7].getBBox(), paths._groups[0][10].getBBox()], d => d.height)
         ],
         [
             [paths._groups[0][2].getBBox().x, paths._groups[0][11].getBBox().x + paths._groups[0][11].getBBox().width],
-            median([paths._groups[0][2].getBBox().height, paths._groups[0][5].getBBox().height, paths._groups[0][8].getBBox().height, paths._groups[0][11].getBBox().height])
+            d3array.median([paths._groups[0][2].getBBox(), paths._groups[0][5].getBBox(), paths._groups[0][8].getBBox(), paths._groups[0][11].getBBox()], d => d.height)
         ]
     )
+
+    let chartBox = d3selection.select('.c3-event-rect')
 
     _.forEach(medians, function(median, index) {
         d3selection.select(".c3-chart-bars").append('line')
             .attr('x1',median[0][0])
             .attr('x2',median[0][1])
-            .attr('y1',median[1])
-            .attr('y2',median[1])
+            .attr('y1',chartBox._groups[0][0].getBBox().height - median[1])
+            .attr('y2',chartBox._groups[0][0].getBBox().height - median[1])
             .attr('stroke','#000')
             .attr('class','median-line')
             .attr('stroke-dasharray', 2)
