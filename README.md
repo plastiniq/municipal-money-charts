@@ -3,30 +3,31 @@
 ## Generate inital municpal money chart with:
 
 ```js
-MuniMoneyChart([muniData]).element
+let chartInstance = new MuniMoneyChart('#container',initialMuniData)
+wrapper.appendChild(chartInstance.chart.element)
 ```
 
 ## Add data with:
 
 ```js
-loadMunis([MuniData])
+chartInstance.loadMunis([MuniData])
 ```
 ## Unload data with:
 
 ```js
-unloadMunis()
+chartInstance.unloadMunis()
 ```
 
 ## Highlight Muni:
 
 ```js
-showMuni(id)
+chartInstance.showMuni(id)
 ```
 
 ## Load Medians:
 
 ```js
-loadMedians([medians])
+chartInstance.loadMedians([medians])
 ```
 
 
