@@ -1,4 +1,4 @@
-import {MuniMoneyChart, loadMunis, unloadMunis, loadMedians, showMuni} from '../components/MuniMoneyChart/MuniMoneyChart';
+import MuniMoneyChart  from '../components/MuniMoneyChart/MuniMoneyChart';
 import { muniDataIn } from '../assets/data.js';
 
 export default {
@@ -14,7 +14,8 @@ export const basicChart = ({category}) => {
 
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    wrapper.appendChild(MuniMoneyChart(muniDataIn.mainMuni[category]).element)
+    let basicChart = new MuniMoneyChart('#basicChart', muniDataIn.mainMuni[category])
+    wrapper.appendChild(basicChart.chart.element)
     return wrapper
 } 
 
@@ -48,7 +49,8 @@ export const compareChart = () => {
 
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    wrapper.appendChild(MuniMoneyChart(muniDataIn.mainMuni['cash_balance']).element)
+    let compareChart = new MuniMoneyChart('#compareChart',muniDataIn.mainMuni['cash_balance'])
+    wrapper.appendChild(compareChart.chart.element)
 
     const btnsContainer = document.createElement('div')
     btnsContainer.setAttribute('style', 'margin-top: 3em; text-align: center')
@@ -56,22 +58,22 @@ export const compareChart = () => {
 
     const additionalMunisBtn = document.createElement('button')
     additionalMunisBtn.innerText = 'Load Munis'
-    additionalMunisBtn.addEventListener('click', () => loadMunis(muniDataIn.comparisons['cash_balance'][0]));
+    additionalMunisBtn.addEventListener('click', () => compareChart.loadMunis(muniDataIn.comparisons['cash_balance'][0]));
     btnsContainer.appendChild(additionalMunisBtn)
 
     const swapMunisBtn = document.createElement('button')
     swapMunisBtn.innerText = 'Swap Munis'
-    swapMunisBtn.addEventListener('click', () => loadMunis(muniDataIn.comparisons['cash_balance'][1]));
+    swapMunisBtn.addEventListener('click', () => compareChart.loadMunis(muniDataIn.comparisons['cash_balance'][1]));
     btnsContainer.appendChild(swapMunisBtn)
 
     const removeMunisBtn = document.createElement('button')
     removeMunisBtn.innerText = 'Unload Munis'
-    removeMunisBtn.addEventListener('click', () => unloadMunis());
+    removeMunisBtn.addEventListener('click', () => compareChart.unloadMunis());
     btnsContainer.appendChild(removeMunisBtn)
 
     const highlightMuniBtn = document.createElement('button')
     highlightMuniBtn.innerText = 'Highlight Muni'
-    highlightMuniBtn.addEventListener('click', () => showMuni('CPT'));
+    highlightMuniBtn.addEventListener('click', () => compareChart.showMuni('CPT'));
     btnsContainer.appendChild(highlightMuniBtn)
     return wrapper
 
@@ -88,8 +90,9 @@ export const medianChart = () => {
 
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    wrapper.appendChild(MuniMoneyChart(muniDataIn.mainMuni['cash_balance']).element)
-    loadMunis(muniDataIn.comparisons['cash_balance'][0])
+    let medianChart = new MuniMoneyChart('#medianChart',muniDataIn.mainMuni['cash_balance'])
+    wrapper.appendChild(medianChart.chart.element)
+    medianChart.loadMunis(muniDataIn.comparisons['cash_balance'][0])
 
     const btnsContainer = document.createElement('div')
     btnsContainer.setAttribute('style', 'margin-top: 3em; text-align: center')
@@ -97,7 +100,7 @@ export const medianChart = () => {
 
     const addMediansBtn = document.createElement('button')
     addMediansBtn.innerText = 'Add Medians'
-    addMediansBtn.addEventListener('click', () => loadMedians(muniDataIn.medians['cash_balance']));
+    addMediansBtn.addEventListener('click', () => medianChart.loadMedians(muniDataIn.medians['cash_balance']));
     btnsContainer.appendChild(addMediansBtn)
 
     return wrapper
