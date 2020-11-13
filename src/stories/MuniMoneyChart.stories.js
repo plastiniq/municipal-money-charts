@@ -1,14 +1,9 @@
-import {action} from '@storybook/addon-actions';
 import {MuniMoneyChart, loadMunis, unloadMunis, loadMedians, showMuni} from '../components/MuniMoneyChart/MuniMoneyChart';
 import { muniDataIn } from '../assets/data.js';
 
-
 export default {
     title: 'MuniMoneyChart',
-    
 }
-
-
 
 
 // --------------------------------------------------------------------------------------//
@@ -78,7 +73,6 @@ export const compareChart = () => {
     highlightMuniBtn.innerText = 'Highlight Muni'
     highlightMuniBtn.addEventListener('click', () => showMuni('CPT'));
     btnsContainer.appendChild(highlightMuniBtn)
-
     return wrapper
 
 } 
