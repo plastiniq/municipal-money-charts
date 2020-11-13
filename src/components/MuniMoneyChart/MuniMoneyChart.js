@@ -18,7 +18,7 @@ export default class MuniMoneyChart {
             colors: {},
             labels: {
                 format: (d) => { 
-                    return muniData.resultType == 'currency' ? this.humaniseRand(d, false) : d
+                    return(this.formatter(d, muniData.resultType))
                 }, 
             },
             selection: {
@@ -57,7 +57,7 @@ export default class MuniMoneyChart {
                 y: {
                     tick: {
                         format: (d) => { 
-                            return muniData.resultType == 'currency' ? this.humaniseRand(d, false) : d
+                            return(this.formatter(d, muniData.resultType))
                         },
                         count: 7
                     }
@@ -82,9 +82,7 @@ export default class MuniMoneyChart {
                     return { left: (tooltipPos.x + axisY.width + tooltipPos.width/2), top: tooltipPos.y - 40 }
                 },
                 contents: (d, defaultTitleFormat, defaultValueFormat, color) => {
-                    let tooltipValue = muniData.resultType == 'currency' ? this.humaniseRand(d[0].value, false) : d[0].value
-                    // let tooltipValue = ''
-                    return '<div class="tooltip"><span class="tooltipValue">' + tooltipValue + '</span></div>'
+                    return '<div class="tooltip"><span class="tooltipValue">' + this.formatter(d[0].value, muniData.resultType) + '</span></div>'
                 }
             },
             labels: true,
@@ -122,7 +120,24 @@ export default class MuniMoneyChart {
         return this.formatRand(x, 0);
     }
 
-   
+    formatter = (d, resultType) => {
+        if(resultType == 'currency') {
+            return this.humaniseRand(d, false)
+        }
+        else if(resultType == 'months') {
+            return Math.round(d * 10) / 10
+        }
+        else if(resultType == 'percentage') {
+            return Math.round(d * 10) / 10 + '%'
+        }
+        else if(resultType == 'ratio') {
+            return Math.round(d * 10) / 10
+        } 
+        else {
+            return d
+        }
+
+    }
   
 
     loadMunis = (compareMunis) => {
@@ -304,21 +319,6 @@ export default class MuniMoneyChart {
 
     addSVGFilters = () => {
 
-
-        let feFlood = document.createElement('svg')
-        feFlood.innerHTML = `
-        <defs>
-            <filter x="0" y="0" width="1" height="1" id="flood">
-                <feFlood flood-color="yellow"/>
-                <feComposite in="SourceGraphic"/>
-            </filter>
-            <filter x="-0.005" y="-0.01" width="1.01" height="1.02" id="border">
-                <feFlood flood-color="black"/>
-                <feComposite in="SourceGraphic"/>
-            </filter>
-        </defs>
-        `
-
         let labelFilter = document.createElement('svg')
         labelFilter.innerHTML = `
         <svg>
@@ -338,7 +338,6 @@ export default class MuniMoneyChart {
             </filter>
         </svg>
         `
-        document.body.appendChild(feFlood)
         document.body.appendChild(labelFilter)
 
     }
