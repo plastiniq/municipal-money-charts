@@ -3,17 +3,30 @@
 ## Generate inital municpal money chart with:
 
 ```js
-muniMoneyChart(container,[muniName,data],[period])
+MuniMoneyChart([muniData]).element
 ```
 
 ## Add data with:
 
 ```js
-loadData([muniName,muniData],[removeSeriesIds])
+loadMunis([MuniData])
 ```
-Adding `removeSeriedIds` unloads previous data before loading new data which is recommended by C3
-
 ## Unload data with:
+
 ```js
-unloadData(muniName)
+unloadMunis()
 ```
+
+## Highlight Muni:
+
+```js
+showMuni(id)
+```
+
+## Load Medians:
+
+```js
+loadMedians([medians])
+```
+
+
