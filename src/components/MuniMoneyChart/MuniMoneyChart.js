@@ -16,11 +16,11 @@ export default class MuniMoneyChart {
             columns: [[]],
             types: {},
             colors: {},
-            // labels: {
-            //     format: function(d) { 
-            //         return muniData.resultType == 'currency' ? humaniseRand(d, false) : d
-            //     }, 
-            // },
+            labels: {
+                format: (d) => { 
+                    return muniData.resultType == 'currency' ? this.humaniseRand(d, false) : d
+                }, 
+            },
             selection: {
                 enabled: true
             }
@@ -74,7 +74,7 @@ export default class MuniMoneyChart {
                 space: 0.25
             },
             tooltip: {
-                show: true,
+                show: false,
                 grouped: false,
                 position: function (element) {
                     let tooltipPos = document.querySelectorAll('.c3-bars-' + element[0].id)[0].children[element[0].index].getBBox()
@@ -87,8 +87,11 @@ export default class MuniMoneyChart {
                     return '<div class="tooltip"><span class="tooltipValue">' + tooltipValue + '</span></div>'
                 }
             },
+            labels: true,
             oninit: () => {
                 this.addMedians()
+                this.addSVGFilters()
+                // this.renderLabels(muniData)
             }
         })
 
@@ -258,45 +261,86 @@ export default class MuniMoneyChart {
     }
 
 
-    // const renderLabels = (muniData) => {
+    renderLabels = (muniData) => {
 
-    //     if(document.querySelectorAll('.c3-chart-texts .c3-texts > rect') != null) { 
-    //         document.querySelectorAll('.c3-chart-texts .c3-texts > rect').forEach(e => e.remove());
-    //     }
+        // if(document.querySelectorAll('.c3-chart-texts .c3-texts > rect') != null) { 
+        //     document.querySelectorAll('.c3-chart-texts .c3-texts > rect').forEach(e => e.remove());
+        // }
 
-    //     let columnLabels = document.querySelectorAll('.c3-chart-texts .c3-texts-' + muniData.municipality.code + ' > .c3-text')
+        // let columnLabels = document.querySelectorAll('.c3-chart-texts .c3-texts-' + muniData.municipality.code + ' > .c3-text')
 
-    //     for (const el of columnLabels) {
+        // for (const el of columnLabels) {
 
-    //         let labelRect = document.createElementNS('http://www.w3.org/2000/svg','rect')
+            // let labelRect = document.createElementNS('http://www.w3.org/2000/svg','rect')
 
-    //         labelRect.setAttribute('x', parseInt(el.getAttribute('x')) - 23)
-    //         labelRect.setAttribute('y', parseInt(el.getAttribute('y') - 18) - (el.getBBox().height + 20)/2)
-    //         labelRect.setAttribute('rx', 5)
-    //         labelRect.setAttribute('ry', 5)
-    //         labelRect.setAttribute('width', el.getBBox().width + 15)
-    //         labelRect.setAttribute('height',el.getBBox().height + 8)
-    //         labelRect.classList.add('labelRectangle')
+            // labelRect.setAttribute('x', parseInt(el.getAttribute('x')) - 23)
+            // labelRect.setAttribute('y', parseInt(el.getAttribute('y') - 18) - (el.getBBox().height + 20)/2)
+            // labelRect.setAttribute('rx', 5)
+            // labelRect.setAttribute('ry', 5)
+            // labelRect.setAttribute('width', el.getBBox().width + 15)
+            // labelRect.setAttribute('height',el.getBBox().height + 8)
+            // labelRect.classList.add('labelRectangle')
 
-    //         document.getElementsByClassName('c3-texts-' + muniData.municipality.code)[0].appendChild(labelRect)
+            // document.getElementsByClassName('c3-texts-' + muniData.municipality.code)[0].appendChild(labelRect)
 
-    //         el.setAttribute('y', parseInt(el.getAttribute('y')) - 18)
+            // el.setAttribute('y', parseInt(el.getAttribute('y')) - 18)
 
+            // document.getElementsByClassName('c3-texts-' + muniData.municipality.code)[0].appendChild(el)
+            // el.setAttribute('style','filter: url(#displacementFilter);')
+        // }
 
-    //         document.getElementsByClassName('c3-texts-' + muniData.municipality.code)[0].appendChild(el)
-    //     }
+        // let removeColumnLabels = document.querySelectorAll('.c3-chart-texts .c3-texts > .c3-text')
+        // for (const el of removeColumnLabels) {
+        //     if(!el.parentNode.classList.contains('c3-texts-' + muniData.municipality.code)) {
+        //         el.remove()
+        //     }
+        // }
 
-    //     let removeColumnLabels = document.querySelectorAll('.c3-chart-texts .c3-texts > .c3-text')
-    //     for (const el of removeColumnLabels) {
-    //         if(!el.parentNode.classList.contains('c3-texts-' + muniData.municipality.code)) {
-    //             el.remove()
-    //         }
-    //     }
-
-    // }
+    }
 
     showTooltips = () => {
         this.chart.tooltip.show({x:2})
+    }
+
+    addSVGFilters = () => {
+
+
+        let feFlood = document.createElement('svg')
+        feFlood.innerHTML = `
+        <defs>
+            <filter x="0" y="0" width="1" height="1" id="flood">
+                <feFlood flood-color="yellow"/>
+                <feComposite in="SourceGraphic"/>
+            </filter>
+            <filter x="-0.005" y="-0.01" width="1.01" height="1.02" id="border">
+                <feFlood flood-color="black"/>
+                <feComposite in="SourceGraphic"/>
+            </filter>
+        </defs>
+        `
+
+        let labelFilter = document.createElement('svg')
+        labelFilter.innerHTML = `
+        <svg>
+            <filter id="rounded-corners" x="-20%" width="140%" y="-15%" height="140%">
+                <feFlood flood-color="#ffffff"/>
+                <feGaussianBlur stdDeviation="2"/>
+                <feComponentTransfer>
+                    <feFuncA type="table"tableValues="0 0 0 1"/>
+                </feComponentTransfer>
+
+                <feComponentTransfer>
+                    <feFuncA type="table"tableValues="0 1 1 1 1 1 1 1"/>
+                </feComponentTransfer>
+
+                <feComposite operator="over" in="SourceGraphic"/>
+
+            </filter>
+        </svg>
+        `
+        document.body.appendChild(feFlood)
+        document.body.appendChild(labelFilter)
+
     }
 
 }

@@ -90,7 +90,7 @@ export const medianChart = () => {
 
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    let medianChart = new MuniMoneyChart('#medianChart',muniDataIn.mainMuni['cash_balance'])
+    let medianChart = new MuniMoneyChart('#medianChart', muniDataIn.mainMuni['cash_balance'])
     wrapper.appendChild(medianChart.chart.element)
     medianChart.loadMunis(muniDataIn.comparisons['cash_balance'][0])
 

@@ -27,13 +27,15 @@
 .c3-text {
     fill: #333 !important;
     font-size: 1.4em;
-    font-weight: bold
+    font-weight: bold;
+    filter: url(#rounded-corners) drop-shadow(0 5px 3px rgba(0, 0, 0, .3));
+    transform: translate(0, -22px);
 }
 
-// .labelRectangle {
-//     fill: #fff; 
-//     filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .2))
-// }
+.labelRectangle {
+    fill: #fff; 
+    filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .2))
+}
 
 .median {
     stroke-dasharray: 5 !important;
