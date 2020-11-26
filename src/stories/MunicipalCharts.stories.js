@@ -1,8 +1,8 @@
-import MunicipalChart  from '../components/MunicipalCharts/MunicipalChart';
+
 import OverlayBarChart  from '../components/MunicipalCharts/OverlayBarChart';
 import PercentageStackedChart  from '../components/MunicipalCharts/PercentageStackedChart';
 import SimpleBarChart  from '../components/MunicipalCharts/SimpleBarChart';
-import { muniDataIn } from '../assets/data.js';
+import * as overlayBarData from './data/overlay-bar-chart.json';
 
 export default {
     title: 'Municipal Charts',
@@ -15,7 +15,7 @@ export default {
 export const OverlayBarChartStory = () => {
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    const chart = new OverlayBarChart()
+    const chart = new OverlayBarChart(wrapper, overlayBarData.default)
     wrapper.appendChild(chart.node())
     return wrapper
 } 

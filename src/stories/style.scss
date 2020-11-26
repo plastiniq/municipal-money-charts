@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+
+.overlay-bar-chart {
+    font-family: 'Rubik', sans-serif;
+    color: #4C4C4C;
+
+    .item {
+        display: flex;
+        height: 20px;
+        align-items: center;
+        font-size: 10px;
+
+        &:not(:last-child) {
+            margin-bottom: 8px;
+        }
+
+        .item-label {
+            width: 25%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            min-width: 0;
+            padding-right: 42px;
+            box-sizing: border-box;
+        }
+
+        .item-track {
+            position: relative;
+            height: 100%;
+            flex-grow: 1;
+            background-color: rgba(0, 0, 0, 0.04);
+            border-radius: 2px;
+            overflow: hidden;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.16);
+            }
+
+            .item-bar {
+                position: absolute;
+                left: 0;
+
+                &:nth-child(1) {
+                    top: 0;
+                    height: 100%;
+                    border-radius: 2px;
+                    background-color: #54298B;
+                }
+
+                &:nth-child(2) {
+                    top: 3px;
+                    height: 6px;
+                    background-color: #A26CE8;
+                }
+
+                &:nth-child(3) {
+                    bottom: 3px;
+                    height: 6px;
+                    background-color: #91899C;
+                }
+            }
+        }
+    }
+}
+
