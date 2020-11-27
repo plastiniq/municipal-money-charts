@@ -1,8 +1,8 @@
 import MunicipalChart from './MunicipalChart.js'
 
 export default class OverlayBarChart extends MunicipalChart {
-  constructor (target, data) {
-    super(target, data)
+  constructor (target) {
+    super(target)
     this._seriesOrder = null
     this._seriesField = 'item'
     this.update()
@@ -10,6 +10,7 @@ export default class OverlayBarChart extends MunicipalChart {
 
   update () {
     const d3 = this.d3
+    const format = d3.format(this._numberFormat)
     const items = this.orderData(
         this.groupData(this.data(), this._seriesField)
     )
@@ -29,16 +30,24 @@ export default class OverlayBarChart extends MunicipalChart {
           .text(d => d.item)
 
         d3.select(this)
-          .selectAll('.item-track')
+          .selectAll('.item-series')
           .data([d])
           .join('div')
-          .classed('item-track', true)
+          .each(function (d) {
+            d3.select(this).selectAll('.item-value')
+              .data([d])
+              .join('span')
+              .classed('item-value', true)
+              .text(format(d.data[0].amount))
+          })
+          .classed('item-series', true)
             .selectAll('.item-bar')
             .data(d.data)
             .join('div')
             .classed('item-bar', true)
-            .style('width', d => {console.log(`${d.amount / maxBarValue * 100}%`); return `${d.amount / maxBarValue * 100}%`})
-      })
+            .attr('data-tooltip', d => format(d.amount))
+            .style('width', d => `${d.amount / maxBarValue * 100}%`)
+      }).selectAll('.item-value').raise()
   }
 
   seriesOrder (value) {

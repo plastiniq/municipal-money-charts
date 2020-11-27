@@ -15,8 +15,8 @@ export default {
 export const OverlayBarChartStory = () => {
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    const chart = new OverlayBarChart(wrapper, overlayBarData.default)
-    wrapper.appendChild(chart.node())
+    const chart = new OverlayBarChart(wrapper).data(overlayBarData.default)
+    chart.numberFormat(',.2r').smallBreakpoint(320)
     return wrapper
 } 
 
@@ -29,8 +29,7 @@ OverlayBarChartStory.storyName = "Overlay Bar Chart"
 export const PercentageStackedChartStory = () => {
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    const chart = new PercentageStackedChart()
-    wrapper.appendChild(chart.node())
+    const chart = new PercentageStackedChart(wrapper)
     return wrapper
 }
 
@@ -43,8 +42,7 @@ PercentageStackedChartStory.storyName = "Percentage Stacked Chart"
 export const SimpleBarChartStory = () => {
     const wrapper = document.createElement('div')
     document.body.appendChild(wrapper)
-    const chart = new SimpleBarChart()
-    wrapper.appendChild(chart.node())
+    const chart = new SimpleBarChart(wrapper)
     return wrapper
 }
 
