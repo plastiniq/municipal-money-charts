@@ -5,17 +5,33 @@ export default class OverlayBarChart extends MunicipalChart {
     super(target)
     this._seriesOrder = null
     this._seriesField = 'item'
-    this.update()
+    this._valueResizeObserver = new ResizeObserver(this.valueResizeHandler())
+  }
+
+  valueResizeHandler () {
+    return entries => {
+      let maxWidth = entries.reduce((maxWidth, entry) => {
+        let width = (entry.contentBoxSize && entry.contentBoxSize[0] && entry.contentBoxSize[0].inlineSize) || 
+                (entry.contentBoxSize && entry.contentBoxSize.inlineSize) || 
+                entry.contentRect.width
+
+        return Math.max(maxWidth, width)
+      }, 0)
+
+      this.d3.selectAll('.item-value').style('min-width', `${maxWidth}px`)
+    }
   }
 
   update () {
     const d3 = this.d3
+    const valueResizeObserver = this._valueResizeObserver
     const format = d3.format(this._numberFormat)
     const items = this.orderData(
         this.groupData(this.data(), this._seriesField)
     )
-    
     const maxBarValue = this.maxBarValue()
+
+    valueResizeObserver.disconnect()
 
     d3.select(this.node()).selectAll('.item')
       .data(items)
@@ -30,24 +46,33 @@ export default class OverlayBarChart extends MunicipalChart {
           .text(d => d.item)
 
         d3.select(this)
-          .selectAll('.item-series')
-          .data([d])
-          .join('div')
-          .each(function (d) {
-            d3.select(this).selectAll('.item-value')
-              .data([d])
-              .join('span')
-              .classed('item-value', true)
-              .text(format(d.data[0].amount))
-          })
-          .classed('item-series', true)
-            .selectAll('.item-bar')
-            .data(d.data)
+          .selectAll('.item-track')
+            .data([d])
             .join('div')
-            .classed('item-bar', true)
-            .attr('data-tooltip', d => format(d.amount))
-            .style('width', d => `${d.amount / maxBarValue * 100}%`)
-      }).selectAll('.item-value').raise()
+            .classed('item-track', true)
+            .each(function (d) {
+              d3.select(this)
+              .selectAll('.item-series')
+              .data([d])
+              .join('div')
+              .classed('item-series', true)
+                .selectAll('.item-bar')
+                .data(d.data)
+                .join('div')
+                .classed('item-bar', true)
+                .attr('data-tooltip', d => format(d.amount))
+                .style('width', d => `${d.amount / maxBarValue * 100}%`)
+
+              d3.select(this).selectAll('.item-value')
+                .data([d])
+                .join('span')
+                .classed('item-value', true)
+                .each(function () {
+                  valueResizeObserver.observe(this)
+                })
+                .text(format(d.data[0].amount))
+            })
+      })
   }
 
   seriesOrder (value) {

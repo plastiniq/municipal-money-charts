@@ -19,6 +19,7 @@ export default class MunicipalChart {
       }
     })
     resizeObserver.observe(this._target)
+    
     this.updateSizeClass()
   }
 
