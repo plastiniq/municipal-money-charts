@@ -67,6 +67,7 @@ export default class OverlayBarChart extends MunicipalChart {
                 .data([d])
                 .join('span')
                 .classed('item-value', true)
+                .style('min-width', 'auto')
                 .each(function () {
                   valueResizeObserver.observe(this)
                 })

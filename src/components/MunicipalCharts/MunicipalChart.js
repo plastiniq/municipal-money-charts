@@ -2,8 +2,13 @@ import * as d3 from 'd3'
 
 export default class MunicipalChart {
   constructor (target) {
-    this._target = target
-    this._node = d3.select(target).append('div').node()
+    this._node = document.createElement('div')
+
+    if (target) {
+      this._target = target
+      target.appendChild(this._node)
+    }
+    
     this._node.className = this.toKebabCase(this.constructor.name)
     this._data = []
     this._numberFormat = ''
@@ -18,7 +23,7 @@ export default class MunicipalChart {
         d3.select(this._node).classed('small', width < this._smallBreakpoint)
       }
     })
-    resizeObserver.observe(this._target)
+    resizeObserver.observe(this._node)
     
     this.updateSizeClass()
   }
@@ -52,7 +57,7 @@ export default class MunicipalChart {
   }
 
   updateSizeClass () {
-    d3.select(this._node).classed('small', this._smallBreakpoint > this._target.getBoundingClientRect().width)
+    d3.select(this._node).classed('small', this._smallBreakpoint > this._node.getBoundingClientRect().width)
   }
 
   numberFormat (value){
