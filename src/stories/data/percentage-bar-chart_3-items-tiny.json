@@ -1,14 +1,14 @@
 [
   {
-    "amount": 100,
+    "amount": 5,
     "label": "Equitable share"
   },
   {
-    "amount": 10,
+    "amount": 5,
     "label": "National conditional grants"
   },
   {
-    "amount": 10,
+    "amount": 100,
     "label": "Provincial transfers"
   }
 ]

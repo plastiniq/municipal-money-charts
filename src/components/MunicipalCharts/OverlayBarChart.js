@@ -22,7 +22,7 @@ export default class OverlayBarChart extends MunicipalChart {
     }
   }
 
-  update () {
+  updateProvider () {
     const d3 = this.d3
     const valueResizeObserver = this._valueResizeObserver
     const format = d3.format(this._numberFormat)
@@ -33,7 +33,7 @@ export default class OverlayBarChart extends MunicipalChart {
 
     valueResizeObserver.disconnect()
 
-    d3.select(this.node()).selectAll('.item')
+    d3.select(this.node).selectAll('.item')
       .data(items)
       .join('div')
       .classed('item', true)
@@ -58,9 +58,10 @@ export default class OverlayBarChart extends MunicipalChart {
               .classed('item-series', true)
                 .selectAll('.item-bar')
                 .data(d.data)
-                .join('div')
-                .classed('item-bar', true)
+                .join(enter => enter.append('div').classed('item-bar', true).style('width', '0%'))
                 .attr('data-tooltip', d => format(d.amount))
+                .transition()
+                .duration(500)
                 .style('width', d => `${d.amount / maxBarValue * 100}%`)
 
               d3.select(this).selectAll('.item-value')
@@ -113,8 +114,6 @@ export default class OverlayBarChart extends MunicipalChart {
   }
 
   maxBarValue () {
-    return this.data().reduce((acc, curr) => {
-      return Math.max(acc, curr.amount)
-    }, 0)
+    return this.data().reduce((acc, curr) => Math.max(acc, curr.amount), 0)
   }
 }

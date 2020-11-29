@@ -1,4 +1,112 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;700&display=swap');
+
+.percentage-stacked-chart {
+    font-family: Rubik, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+
+    .items {
+        height: 105px;
+        display: flex;
+        margin-right: -4px;
+
+        .item {
+            height: 100%;
+            border-radius: 4px;
+            background-color: #23728B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: visible;
+            position: relative;
+            width: 0;
+            flex-basis: 0;
+
+            .item-label {
+                
+                &.internal {
+                    overflow: visible;
+                    text-align: center;
+                    padding: 0 20px;
+
+                    >*:nth-child(1) {
+                        font-weight: bold;
+                        font-size: 22px;
+                        color: #FFFFFF;
+                    }
+    
+                    >*:nth-child(2) {
+                        font-size: 12px;
+                        color: rgba(255, 255, 255, 0.6);
+                    }
+                }
+
+                &.external {
+                    --level-height: 24;
+                    color: #4C4C4C;
+                    font-size: 10px;
+                    display: none;
+                    overflow: visible;
+                    white-space: nowrap;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+
+                    > div {
+                        position: absolute;
+                        padding: 0 4px;
+                        bottom: 0;
+                        background: #FFFFFF;
+                        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                        border-radius: 4px;
+                        z-index: 100;
+                    }
+
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        left: calc(50% - 0.5px);
+                        width: 1px;
+                        top: 0;
+                        bottom: 0;
+                        background-color: rgba(0, 0, 0, 0.4);
+                        transform: translateX(-50%);
+                    }
+                }
+            }
+
+            &.label-overflow {
+                .item-label {
+                    &.internal {
+                        visibility: hidden;
+                    }
+
+                    &.external {
+                        display: block;
+                        left: 0;
+
+                        &[data-align="center"] {
+                            >* {
+                                left: 50%;
+                                transform: translateX('50%');
+                            }
+                            
+                        }
+
+                        &[data-align="right"] {
+                            >* {
+                                left: auto;
+                                right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 .overlay-bar-chart {
     font-family: 'Rubik', sans-serif;
@@ -58,7 +166,6 @@
                 .item-bar {
                     position: absolute;
                     left: 0;
-                    transition: width 0.5s ease;
 
                     &:nth-child(1) {
                         top: 0;

@@ -43,7 +43,10 @@ export default class MunicipalChart {
   }
 
   update () {
+    this.updateProvider()
+  }
 
+  updateProvider () {
   }
 
   smallBreakpoint (value) {
@@ -70,7 +73,7 @@ export default class MunicipalChart {
     return this
   }
 
-  node () {
+  get node () {
     return this._node
   }
 
