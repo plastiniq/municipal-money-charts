@@ -9,8 +9,8 @@ const dataOptions = {
     'Empty Data': []
 }
 
-const story = ({ smallBreakpoint, dataName, numberFormat }) => {
-    chart.data(dataOptions[dataName]).numberFormat(numberFormat).smallBreakpoint(smallBreakpoint)
+const story = ({ width, smallBreakpoint, dataName, numberFormat }) => {
+    chart.data(dataOptions[dataName]).numberFormat(numberFormat).smallBreakpoint(smallBreakpoint).width(width)
     return chart.node
 } 
 
@@ -19,6 +19,11 @@ export default story
 story.storyName = "Overlay Bar Chart"
 
 story.argTypes = {
+    width: {
+        control: {
+            type: 'number'
+        }
+    },
     smallBreakpoint: {
         control: {
             type: 'select',
@@ -47,6 +52,7 @@ story.argTypes = {
 }
 
 story.args = {
+    width: '',
     smallBreakpoint: 300,
     dataName: Object.keys(dataOptions)[0],
     numberFormat: ',.2r'

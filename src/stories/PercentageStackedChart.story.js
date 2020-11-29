@@ -13,14 +13,19 @@ const dataOptions = {
     '3 Items Tiny': data3ItemsTiny.default
 }
 
-const story = ({ smallBreakpoint, dataName }) => {
-    chart.data(dataOptions[dataName]).smallBreakpoint(smallBreakpoint)
+const story = ({ width, smallBreakpoint, dataName }) => {
+    chart.data(dataOptions[dataName]).smallBreakpoint(smallBreakpoint).width(width)
     return chart.node
 }
 
 export default story
 
 story.argTypes = {
+    width: {
+        control: {
+            type: 'number'
+        }
+    },
     smallBreakpoint: {
         control: {
             type: 'select',
@@ -39,6 +44,7 @@ story.argTypes = {
 }
 
 story.args = {
+    width: '',
     smallBreakpoint: 300,
     dataName: Object.keys(dataOptions)[0]
 }

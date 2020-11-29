@@ -12,6 +12,7 @@ export default class MunicipalChart {
     this._node.className = this.toKebabCase(this.constructor.name)
     this._data = []
     this._numberFormat = ''
+    this._width = 'auto'
     this._smallBreakpoint = 600
 
     const resizeObserver = new ResizeObserver(entries => {
@@ -20,7 +21,7 @@ export default class MunicipalChart {
                 (entry.contentBoxSize && entry.contentBoxSize.inlineSize) || 
                 entry.contentRect.width
 
-        d3.select(this._node).classed('small', width < this._smallBreakpoint)
+        d3.select(this._node).classed('small', this._smallBreakpoint >= width)
       }
     })
     resizeObserver.observe(this._node)
@@ -47,6 +48,16 @@ export default class MunicipalChart {
   }
 
   updateProvider () {
+  }
+
+  width (value) {
+    if (!arguments.length) {
+      return this._width
+    }
+
+    this._width = value
+    d3.select(this._node).style('width', typeof value === 'number' ? `${value}px` : value)
+    return this
   }
 
   smallBreakpoint (value) {
