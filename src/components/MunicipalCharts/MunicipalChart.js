@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import ResizeObserver from 'resize-observer-polyfill';
+import ResizeObserver from 'resize-observer-polyfill'
 
 export default class MunicipalChart {
   constructor (target) {

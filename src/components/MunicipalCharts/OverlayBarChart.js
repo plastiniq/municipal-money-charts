@@ -1,4 +1,5 @@
 import MunicipalChart from './MunicipalChart.js'
+import ResizeObserver from 'resize-observer-polyfill'
 
 export default class OverlayBarChart extends MunicipalChart {
   constructor (target) {

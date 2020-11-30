@@ -1,5 +1,5 @@
 import MunicipalChart from './MunicipalChart.js'
-import ResizeObserver from 'resize-observer-polyfill';
+import ResizeObserver from 'resize-observer-polyfill'
 
 export default class PercentageStackedChart extends MunicipalChart {
   constructor (target) {
