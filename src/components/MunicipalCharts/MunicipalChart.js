@@ -38,7 +38,12 @@ export default class MunicipalChart {
   }
 
   update () {
-    this.updateProvider()
+    if (this._scheduledUpdate === undefined) {
+      this._scheduledUpdate = window.requestAnimationFrame(() => {
+        this.updateProvider()
+        this._scheduledUpdate = undefined
+      })
+    }
   }
 
   updateProvider () {
