@@ -148,12 +148,39 @@
 
         .item-label {
             width: 25%;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            overflow: visible;
             min-width: 0;
             padding-right: 20px;
             box-sizing: border-box;
+
+            .item-label-body {
+                position: relative;
+                max-width: 100%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+
+                &:hover {
+                    overflow: visible;
+                    max-width: none;
+                    min-width: max-content;
+                    z-index: 100;
+                    text-overflow: clip;
+                    
+                    &:before {
+                        content: "";
+                        background-color: rgba(255, 255, 255, 0.6);
+                        position: absolute;
+                        display: block;
+                        left: -4px;
+                        right: -4px;
+                        top: 0;
+                        height: 100%;
+                        z-index: -1;
+                        border-radius: 2px;
+                    }
+                }
+            }
         }
 
         .item-track {
