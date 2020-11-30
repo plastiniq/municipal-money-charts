@@ -25,7 +25,7 @@ export default class OverlayBarChart extends MunicipalChart {
   updateProvider () {
     const d3 = this.d3
     const valueResizeObserver = this._valueResizeObserver
-    const format = d3.format(this._numberFormat)
+    const format = this._format
     const items = this.orderData(
         this.groupData(this.data(), this._seriesField)
     )

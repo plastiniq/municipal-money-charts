@@ -11,7 +11,7 @@ export default class MunicipalChart {
     
     this._node.className = this.toKebabCase(this.constructor.name)
     this._data = []
-    this._numberFormat = ''
+    this._format = d3.format('')
     this._width = 'auto'
     this._smallBreakpoint = 600
 
@@ -74,12 +74,12 @@ export default class MunicipalChart {
     d3.select(this._node).classed('small', this._smallBreakpoint > this._node.getBoundingClientRect().width)
   }
 
-  numberFormat (value){
+  format (value){
     if (!arguments.length) {
-      return this._numberFormat
+      return this._format
     }
 
-    this._numberFormat = value
+    this._format = value
     this.update()
     return this
   }

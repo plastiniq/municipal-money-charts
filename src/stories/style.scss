@@ -220,6 +220,7 @@
 
                     &:nth-child(2), &:nth-child(3) {
                         &:before, &:after {
+                            white-space: nowrap;
                             display: none;
                             z-index: 100;
                         }

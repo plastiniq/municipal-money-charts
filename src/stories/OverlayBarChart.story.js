@@ -1,16 +1,28 @@
 import OverlayBarChart  from '../components/MunicipalCharts/OverlayBarChart';
+const d3Format = require('d3-format')
 import * as data1 from './data/overlay-bar-chart-1.json';
 import * as data2 from './data/overlay-bar-chart-2.json';
 
 const chart = new OverlayBarChart()
+
 const dataOptions = {
     'Data 1': data1.default,
     'Data 2': data2.default,
     'Empty Data': []
 }
 
-const story = ({ width, smallBreakpoint, dataName, numberFormat }) => {
-    chart.data(dataOptions[dataName]).numberFormat(numberFormat).smallBreakpoint(smallBreakpoint).width(width)
+const formatOptions = {
+    'R currency': d3Format.formatLocale({
+        decimal: '.',
+        thousands: ' ',
+        grouping: [3],
+        currency: ['R', ''],
+    }).format('$,'),
+    'default currency': d3Format.format('($.2f')
+}
+
+const story = ({ width, smallBreakpoint, dataName, format }) => {
+    chart.data(dataOptions[dataName]).format(formatOptions[format]).smallBreakpoint(smallBreakpoint).width(width)
     return chart.node
 } 
 
@@ -35,14 +47,10 @@ story.argTypes = {
             options: Object.keys(dataOptions)
         }
     },
-    numberFormat: {
+    format: {
         control: {
             type: 'select',
-            options: [
-                ',.2r',
-                '.2s',
-                '($.2f'
-            ]
+            options: Object.keys(formatOptions)
         }
     }
 }
@@ -51,5 +59,5 @@ story.args = {
     width: '',
     smallBreakpoint: 300,
     dataName: Object.keys(dataOptions)[0],
-    numberFormat: ',.2r'
+    format: Object.keys(formatOptions)[0]
 }
