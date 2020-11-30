@@ -64,7 +64,6 @@ export default class PercentageStackedChart extends MunicipalChart {
         itemResizeObserver.observe(this)
 
         // create or update internal and external labels
-
         d3.select(this)
           .selectAll('.item-label')
           .data([internalLabelFunc(d), externalLabelFunc(d)])

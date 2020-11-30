@@ -1,6 +1,6 @@
 import BarChart  from '../components/MunicipalCharts/BarChart';
-import * as data1 from './data/bar-chart.json';
-import * as data2 from './data/bar-chart.json';
+import * as data1 from './data/bar-chart-1.json';
+import * as data2 from './data/bar-chart-2.json';
 
 const chart = new BarChart()
 const dataOptions = {
@@ -26,11 +26,7 @@ story.argTypes = {
     },
     smallBreakpoint: {
         control: {
-            type: 'select',
-            options: [
-                300,
-                2000 
-            ],
+            type: 'number'
         },
     },
     dataName: {

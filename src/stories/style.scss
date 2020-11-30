@@ -4,6 +4,7 @@
     font-family: Rubik, sans-serif;
     font-style: normal;
     font-weight: normal;
+    line-height: normal;
     overflow: visible;
 
     .items {
@@ -121,7 +122,10 @@
 }
 
 .overlay-bar-chart, .bar-chart {
-    font-family: 'Rubik', sans-serif;
+    font-family: Rubik, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
     color: #4C4C4C;
 
     &.small {
@@ -133,6 +137,7 @@
             .item-label {
                 width: auto;
                 padding-right: 0;
+                margin-bottom: 4px;
             }
         }
     }
@@ -284,6 +289,16 @@
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+.bar-chart {
+    .item {
+        .item-track {
+            .item-series {
+                height: 16px;
             }
         }
     }

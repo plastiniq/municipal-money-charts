@@ -26,11 +26,7 @@ story.argTypes = {
     },
     smallBreakpoint: {
         control: {
-            type: 'select',
-            options: [
-                300,
-                2000 
-            ],
+            type: 'number'
         },
     },
     dataName: {
