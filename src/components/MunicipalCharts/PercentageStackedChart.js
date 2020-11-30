@@ -5,8 +5,8 @@ export default class PercentageStackedChart extends MunicipalChart {
   constructor (target) {
     super(target)
     this._items = this.d3.select(this.node).append('div').classed('items', true).node()
-    this._internalLabel = d => [d.amount, d.label]
-    this._externalLabel = d => [`${d.label ? d.label + ': ' : ''} ${d.amount}`]
+    this._mainLabel = d => [d.amount, d.label]
+    this._subLabel = d => [`${d.label ? d.label + ': ' : ''} ${d.amount}`]
     this._itemResizeObserver = new ResizeObserver(this.itemResizeHandler())
   }
 
@@ -18,20 +18,20 @@ export default class PercentageStackedChart extends MunicipalChart {
       var overflowCounter = 0
 
       d3.select(this.node).selectAll('.item').each(function () {
-        const externalLabel = d3.select(this).select('.item-label.external')
-        const internalLabelBody = d3.select(this).select('.item-label.internal .item-label-body')
-        const externalLabelBody = externalLabel.select('.item-label-body')
-        const overflow = internalLabelBody.node() && internalLabelBody.node().getBoundingClientRect().width > this.clientWidth
+        const subLabel = d3.select(this).select('.item-label.sub')
+        const mainLabelBody = d3.select(this).select('.item-label.main .item-label-body')
+        const subLabelBody = subLabel.select('.item-label-body')
+        const overflow = mainLabelBody.node() && mainLabelBody.node().getBoundingClientRect().width > this.clientWidth
 
         if (!this.classList.contains('remove') && !this.classList.contains('add')) {
           d3.select(this).classed('label-overflow', overflow)
 
-          if (overflow && externalLabel.node()) {
+          if (overflow && subLabel.node()) {
             let itemRect = d3.select(this).node().getBoundingClientRect()
-            let externalBodyRect = externalLabelBody.node().getBoundingClientRect()
+            let subBodyRect = subLabelBody.node().getBoundingClientRect()
             let offsetScale = (itemRect.left + itemRect.width / 2 - nodeRect.left) / nodeRect.width
-            externalLabel.attr('data-align', externalBodyRect.width < itemRect.width ? 'center' : offsetScale < 1 / 3 ? 'left' : offsetScale < 2 / 3 ? 'center' : 'right')
-            externalLabel.style('height',`${parseInt(getComputedStyle(externalLabel.node()).getPropertyValue('--level-height')) * ++overflowCounter}px`)
+            subLabel.attr('data-align', subBodyRect.width < itemRect.width ? 'center' : offsetScale < 1 / 3 ? 'left' : offsetScale < 2 / 3 ? 'center' : 'right')
+            subLabel.style('height',`${parseInt(getComputedStyle(subLabel.node()).getPropertyValue('--level-height')) * ++overflowCounter}px`)
           }
         }
       })
@@ -42,8 +42,8 @@ export default class PercentageStackedChart extends MunicipalChart {
   updateProvider () {
     const d3 = this.d3
     const maxValue = this.maxValue()
-    const internalLabelFunc = this._internalLabel
-    const externalLabelFunc = this._externalLabel
+    const mainLabelFunc = this._mainLabel
+    const subLabelFunc = this._subLabel
     const itemResizeObserver = this._itemResizeObserver
     const itemResizeHandler = this.itemResizeHandler()
     const transitionDuration = 700
@@ -64,18 +64,18 @@ export default class PercentageStackedChart extends MunicipalChart {
       .each(function (d) {
         itemResizeObserver.observe(this)
 
-        // create or update internal and external labels
+        // create or update main and sub labels
         d3.select(this)
           .selectAll('.item-label')
-          .data([internalLabelFunc(d), externalLabelFunc(d)])
+          .data([mainLabelFunc(d), subLabelFunc(d)])
             .join(
               enter => enter.append('div').style('opacity', 0),
               update => update,
               exit => exit.transition().duration(transitionDuration).style('opacity', 0).remove()
             )
               .classed('item-label', true)
-              .classed('internal', (d, i) => !i)
-              .classed('external', (d, i) => i)
+              .classed('main', (d, i) => !i)
+              .classed('sub', (d, i) => i)
               .transition()
               .duration(transitionDuration)
               .style('opacity', 1)
@@ -101,13 +101,23 @@ export default class PercentageStackedChart extends MunicipalChart {
       })
   }
 
-  internalLabel (func) {
+  mainLabel (func) {
     if (!arguments.length) {
-      return this._internalLabel
+      return this._mainLabel
     }
 
-    this._internalLabel = func
-    thus.update()
+    this._mainLabel = func
+    this.update()
+    return this
+  }
+
+  subLabel (func) {
+    if (!arguments.length) {
+      return this._subLabel
+    }
+
+    this._subLabel = func
+    this.update()
     return this
   }
 

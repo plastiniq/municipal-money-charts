@@ -13,8 +13,18 @@ const dataOptions = {
     '3 Items Tiny': data3ItemsTiny.default
 }
 
-const story = ({ width, smallBreakpoint, dataName }) => {
-    chart.data(dataOptions[dataName]).smallBreakpoint(smallBreakpoint).width(width)
+const mainLabelOptions = {
+    "Default": d => [d.amount, d.label],
+    "Option 1": d => ['Some Text']
+}
+
+const subLabelOptions = {
+    "Default": d => [`${d.label ? d.label + ': ' : ''} ${d.amount}`],
+    "Option 1": d => [`Number of people on the moon: ${d.amount}`]
+}
+
+const story = ({ width, smallBreakpoint, dataName, mainLabel, subLabel }) => {
+    chart.data(dataOptions[dataName]).smallBreakpoint(smallBreakpoint).width(width).mainLabel(mainLabelOptions[mainLabel]).subLabel(subLabelOptions[subLabel])
     return chart.node
 }
 
@@ -31,13 +41,27 @@ story.argTypes = {
             type: 'select',
             options: Object.keys(dataOptions)
         }
+    },
+    mainLabel: {
+        control: {
+            type: 'select',
+            options: Object.keys(mainLabelOptions)
+        }
+    },
+    subLabel: {
+        control: {
+            type: 'select',
+            options: Object.keys(subLabelOptions)
+        }
     }
 }
 
 story.args = {
     width: '',
     smallBreakpoint: 300,
-    dataName: Object.keys(dataOptions)[0]
+    dataName: Object.keys(dataOptions)[0],
+    mainLabel: Object.keys(mainLabelOptions)[0],
+    subLabel: Object.keys(subLabelOptions)[0]
 }
 
 story.storyName = "Percentage Stacked Chart"

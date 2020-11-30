@@ -23,7 +23,7 @@
 
             .item-label {
                 
-                &.internal {
+                &.main {
                     overflow: hidden;
                     position: absolute;
                     display: flex;
@@ -55,7 +55,7 @@
                     }
                 }
 
-                &.external {
+                &.sub {
                     --level-height: 24;
                     color: #4C4C4C;
                     font-size: 10px;
@@ -92,11 +92,11 @@
 
             &.label-overflow {
                 .item-label {
-                    &.internal {
+                    &.main {
                         visibility: hidden;
                     }
 
-                    &.external {
+                    &.sub {
                         display: block;
                         left: 0;
 
