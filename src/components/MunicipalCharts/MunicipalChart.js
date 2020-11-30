@@ -16,17 +16,10 @@ export default class MunicipalChart {
     this._width = 'auto'
     this._smallBreakpoint = 600
 
-    const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        let width = (entry.contentBoxSize && entry.contentBoxSize[0] && entry.contentBoxSize[0].inlineSize) || 
-                (entry.contentBoxSize && entry.contentBoxSize.inlineSize) || 
-                entry.contentRect.width
-
-        d3.select(this._node).classed('small', this._smallBreakpoint >= width)
-      }
+    const resizeObserver = new ResizeObserver(() => {
+      d3.select(this._node).classed('small', this._smallBreakpoint >= this._node.offsetWidth)
     })
     resizeObserver.observe(this._node)
-    
     this.updateSizeClass()
   }
 
