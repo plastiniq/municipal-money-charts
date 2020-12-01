@@ -22,8 +22,10 @@ const formatOptions = {
 }
 
 const story = ({ width, smallBreakpoint, dataName, format }) => {
-    chart.data(dataOptions[dataName]).format(formatOptions[format]).smallBreakpoint(smallBreakpoint).width(width)
-    return chart.node
+    return chart.data(dataOptions[dataName])
+        .format(formatOptions[format])
+        .smallBreakpoint(smallBreakpoint).width(width)
+        .node
 } 
 
 export default story

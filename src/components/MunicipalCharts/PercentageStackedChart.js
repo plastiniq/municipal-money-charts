@@ -41,7 +41,7 @@ export default class PercentageStackedChart extends MunicipalChart {
 
   updateProvider () {
     const d3 = this.d3
-    const maxValue = this.maxValue()
+    const totalAmount = this.maxValue()
     const mainLabelFunc = this._mainLabel
     const subLabelFunc = this._subLabel
     const itemResizeObserver = this._itemResizeObserver
@@ -65,6 +65,7 @@ export default class PercentageStackedChart extends MunicipalChart {
         itemResizeObserver.observe(this)
 
         // create or update main and sub labels
+        
         d3.select(this)
           .selectAll('.item-label')
           .data([mainLabelFunc(d), subLabelFunc(d)])
@@ -76,29 +77,44 @@ export default class PercentageStackedChart extends MunicipalChart {
               .classed('item-label', true)
               .classed('main', (d, i) => !i)
               .classed('sub', (d, i) => i)
+              .each(function (d) {
+                d3.select(this).selectAll('.item-label-view-port')
+                  .data([d])
+                  .join('div')
+                  .classed('item-label-view-port', true)
+                    .selectAll('.item-label-body')
+                    .data([d])
+                    .join('div')
+                      .classed('item-label-body', true)
+                      .selectAll('div')
+                        .data(d)
+                        .join('div')
+                        .text(d => d)
+              })
               .transition()
               .duration(transitionDuration)
               .style('opacity', 1)
-              .each(function (d) {
-                d3.select(this).selectAll('.item-label-body')
-                .data([d])
-                .join('div')
-                  .classed('item-label-body', true)
-                  .selectAll('div')
-                    .data(d)
-                    .join('div')
-                    .text(d => d)
-              })
       })
       .classed('item', true)
       .transition()
       .duration(transitionDuration)
-      .style('flex-grow', d => d.amount / maxValue)
+      .style('flex-grow', d => d.amount / totalAmount)
       .style('margin-right', '4px')
-      .on('end', function () {
-        d3.select(this).classed('add', false)
-        itemResizeHandler()
+
+      this.toggleLabels()
+  }
+
+  toggleLabels () {
+    const d3 = this.d3
+    const totalAmount = this.totalAmount()
+    const itemsNodeWidth = this._items.clientWidth
+
+    d3.select(this._items).selectAll('.item').each(function (itemDatum) {
+      console.log(itemDatum)
+      d3.select(this).select('.item-label.main').style('width', `${itemDatum.amount / totalAmount * itemsNodeWidth}px`).each(function () {
+        d3.select(this).classed('overflow', d3.select(this).select('.item-label-body').node().clientWidth > this.clientWidth)
       })
+    })
   }
 
   mainLabel (func) {
@@ -123,5 +139,9 @@ export default class PercentageStackedChart extends MunicipalChart {
 
   maxValue () {
     return this.data().reduce((acc, curr) => Math.max(acc, curr.amount), 0)
+  }
+
+  totalAmount () {
+    return this.data().reduce((acc, curr) => acc + curr.amount, 0)
   }
 }
