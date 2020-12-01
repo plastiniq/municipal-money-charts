@@ -23,8 +23,8 @@ const subLabelOptions = {
     "Option 1": d => [`Number of people on the moon: ${d.amount}`]
 }
 
-const story = ({ width, smallBreakpoint, dataName, mainLabel, subLabel }) => {
-    chart.data(dataOptions[dataName]).smallBreakpoint(smallBreakpoint).width(width).mainLabel(mainLabelOptions[mainLabel]).subLabel(subLabelOptions[subLabel])
+const story = ({ width, dataName, mainLabel, subLabel }) => {
+    chart.data(dataOptions[dataName]).width(width).mainLabel(mainLabelOptions[mainLabel]).subLabel(subLabelOptions[subLabel])
     return chart.node
 }
 
@@ -58,7 +58,6 @@ story.argTypes = {
 
 story.args = {
     width: '',
-    smallBreakpoint: 300,
     dataName: Object.keys(dataOptions)[0],
     mainLabel: Object.keys(mainLabelOptions)[0],
     subLabel: Object.keys(subLabelOptions)[0]

@@ -99,7 +99,7 @@ export default class PercentageStackedChart extends MunicipalChart {
           item.select('.item-label.sub')
             .style('width', `${itemComputedWidth}px`)
             .attr('data-align', function () {
-              return d3.select(this).select('.item-label-body').clientWidth < itemComputedWidth ? 'center' : (offset / itemsNodeWidth) < 1 / 3 ? 'left' : (offset / itemsNodeWidth) < 2 / 3 ? 'center' : 'right'
+              return d3.select(this).select('.item-label-body').node().clientWidth < itemComputedWidth ? 'center' : (offset / itemsNodeWidth) < 1 / 3 ? 'left' : (offset / itemsNodeWidth) < 2 / 3 ? 'center' : 'right'
             })
         })
 

@@ -21,6 +21,8 @@
             position: relative;
             width: 0;
             flex-basis: 0;
+            display: flex;
+            justify-content: center;
 
             .item-label {
                 transition: opacity var(--transition-duration);
@@ -76,9 +78,6 @@
                     white-space: nowrap;
                     position: absolute;
                     top: 100%;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    transition: height var(--transition-duration);
 
                     .item-label-body {
                         position: absolute;
