@@ -7,35 +7,19 @@ export default class PercentageStackedChart extends MunicipalChart {
     this._items = this.d3.select(this.node).append('div').classed('items', true).node()
     this._mainLabel = d => [d.amount, d.label]
     this._subLabel = d => [`${d.label ? d.label + ': ' : ''} ${d.amount}`]
-    this._itemResizeObserver = new ResizeObserver(this.itemResizeHandler())
+    this._itemResizeObserver = new ResizeObserver(() => this.toggleLabels())
+    this._itemResizeObserver.observe(this._items)
   }
 
   itemResizeHandler () {
     const d3 = this.d3
   
     return () => {
-      const nodeRect = this.node.getBoundingClientRect()
-      var overflowCounter = 0
-
-      d3.select(this.node).selectAll('.item').each(function () {
-        const subLabel = d3.select(this).select('.item-label.sub')
-        const mainLabelBody = d3.select(this).select('.item-label.main .item-label-body')
-        const subLabelBody = subLabel.select('.item-label-body')
-        const overflow = mainLabelBody.node() && mainLabelBody.node().getBoundingClientRect().width > this.clientWidth
-
-        if (!this.classList.contains('remove') && !this.classList.contains('add')) {
-          d3.select(this).classed('label-overflow', overflow)
-
-          if (overflow && subLabel.node()) {
-            let itemRect = d3.select(this).node().getBoundingClientRect()
-            let subBodyRect = subLabelBody.node().getBoundingClientRect()
-            let offsetScale = (itemRect.left + itemRect.width / 2 - nodeRect.left) / nodeRect.width
-            subLabel.attr('data-align', subBodyRect.width < itemRect.width ? 'center' : offsetScale < 1 / 3 ? 'left' : offsetScale < 2 / 3 ? 'center' : 'right')
-            subLabel.style('height',`${parseInt(getComputedStyle(subLabel.node()).getPropertyValue('--level-height')) * ++overflowCounter}px`)
-          }
-        }
+      d3.select(this._items).selectAll('.item.label-overflow').each(function (d, i) {
+        d3.select(this)
+          .select('.item-label.sub')
+          .call(subLabel => subLabel.style('height',`${parseInt(getComputedStyle(subLabel.node()).getPropertyValue('--level-height')) * (i + 1)}px`))
       })
-      d3.select(this.node).style('height', `${this._items.scrollHeight}px`)
     }
   }
 
@@ -44,15 +28,12 @@ export default class PercentageStackedChart extends MunicipalChart {
     const totalAmount = this.maxValue()
     const mainLabelFunc = this._mainLabel
     const subLabelFunc = this._subLabel
-    const itemResizeObserver = this._itemResizeObserver
-    const itemResizeHandler = this.itemResizeHandler()
     const transitionDuration = 700
-    itemResizeObserver.disconnect()
 
     d3.select(this._items).selectAll('.item')
       .data(this.data())
       .join(
-        enter => enter.append('div').style('flex-grow', 0).classed('add', true),
+        enter => enter.append('div').style('flex-grow', 0),
         update => update,
         exit => exit.classed('remove', true)
           .transition()
@@ -62,8 +43,6 @@ export default class PercentageStackedChart extends MunicipalChart {
           .remove()
       )
       .each(function (d) {
-        itemResizeObserver.observe(this)
-
         // create or update main and sub labels
         
         d3.select(this)
@@ -72,16 +51,15 @@ export default class PercentageStackedChart extends MunicipalChart {
             .join(
               enter => enter.append('div').style('opacity', 0),
               update => update,
-              exit => exit.transition().duration(transitionDuration).style('opacity', 0).remove()
             )
               .classed('item-label', true)
               .classed('main', (d, i) => !i)
               .classed('sub', (d, i) => i)
               .each(function (d) {
-                d3.select(this).selectAll('.item-label-view-port')
+                d3.select(this).selectAll('.item-label-space')
                   .data([d])
                   .join('div')
-                  .classed('item-label-view-port', true)
+                  .classed('item-label-space', true)
                     .selectAll('.item-label-body')
                     .data([d])
                     .join('div')
@@ -108,13 +86,39 @@ export default class PercentageStackedChart extends MunicipalChart {
     const d3 = this.d3
     const totalAmount = this.totalAmount()
     const itemsNodeWidth = this._items.clientWidth
+    var offset = 0
 
-    d3.select(this._items).selectAll('.item').each(function (itemDatum) {
-      console.log(itemDatum)
-      d3.select(this).select('.item-label.main').style('width', `${itemDatum.amount / totalAmount * itemsNodeWidth}px`).each(function () {
-        d3.select(this).classed('overflow', d3.select(this).select('.item-label-body').node().clientWidth > this.clientWidth)
-      })
+    d3.select(this._items).selectAll('.item').filter(':not(.remove)').each(function (itemDatum, itemIndex) {
+      const itemComputedWidth = itemDatum.amount / totalAmount * itemsNodeWidth
+      
+      d3.select(this)
+        .call(item => {
+          offset += itemComputedWidth / 2
+          item.select('.item-label.main .item-label-space').style('width', `${itemComputedWidth}px`)
+          item.classed('label-overflow', item.select('.item-label-body').node().offsetWidth > itemComputedWidth)
+          item.select('.item-label.sub')
+            .style('width', `${itemComputedWidth}px`)
+            .attr('data-align', function () {
+              return d3.select(this).select('.item-label-body').clientWidth < itemComputedWidth ? 'center' : (offset / itemsNodeWidth) < 1 / 3 ? 'left' : (offset / itemsNodeWidth) < 2 / 3 ? 'center' : 'right'
+            })
+        })
+
+        offset += itemComputedWidth / 2
     })
+
+    this.orderLabels()
+  }
+
+  orderLabels () {
+    const d3 = this.d3
+
+    d3.select(this._items).selectAll('.item.label-overflow').each(function (d, i) {
+      d3.select(this)
+        .select('.item-label.sub')
+        .call(subLabel => subLabel.style('height',`${parseInt(getComputedStyle(subLabel.node()).getPropertyValue('--level-height')) * (i + 1)}px`))
+    })
+
+    d3.select(this.node).style('height', `${this._items.scrollHeight}px`)
   }
 
   mainLabel (func) {
