@@ -1,0 +1,137 @@
+.percentage-stacked-chart {
+    font-family: Rubik, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    overflow: visible;
+    --transition-duration: 0.3s;
+
+    .items {
+        height: 105px;
+        display: flex;
+        margin-right: -4px;
+
+        .item {
+            height: 100%;
+            border-radius: 4px;
+            background-color: #23728B;
+            overflow: visible;
+            position: relative;
+            width: 0;
+            flex-basis: 0;
+            display: flex;
+            justify-content: center;
+
+            .item-label {
+                transition: opacity var(--transition-duration);
+
+                &.main {
+                    position: absolute;
+                    overflow: hidden;
+                    left: 0;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    .item-label-space {
+                        overflow: visible;
+                        position: absolute;
+                        height: 100%;
+                        left: 50%;
+                        top: 0;
+                        transform: translateX(-50%);
+
+                        .item-label-body {
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                            text-align: center;
+                            padding: 0 20px;
+
+                            >*:nth-child(1) {
+                                font-weight: bold;
+                                font-size: 22px;
+                                color: #FFFFFF;
+                                margin-bottom: 2px;
+                            }
+
+                            >*:nth-child(2) {
+                                font-size: 12px;
+                                color: rgba(255, 255, 255, 0.6);
+                            }
+                        }
+                    }
+                }
+
+                &.sub {
+                    --level-height: 24;
+                    color: #4C4C4C;
+                    font-size: 10px;
+                    display: none;
+                    overflow: visible;
+                    white-space: nowrap;
+                    position: absolute;
+                    top: 100%;
+
+                    .item-label-body {
+                        position: absolute;
+                        padding: 0 4px;
+                        bottom: 0;
+                        background: #FFFFFF;
+                        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                        border-radius: 4px;
+                        z-index: 100;
+                    }
+
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        left: calc(50% - 0.5px);
+                        width: 1px;
+                        top: 0;
+                        bottom: 5px;
+                        background-color: rgba(0, 0, 0, 0.4);
+                        transform: translateX(-50%);
+                    }
+                }
+            }
+
+            &.remove {
+                .item-label {
+                    opacity: 0 !important;
+                }
+            }
+
+            &.label-overflow {
+                .item-label {
+                    &.main {
+                        opacity: 0 !important;
+                    }
+
+                    &.sub {
+                        display: block;
+
+                        &[data-align="center"] {
+                            .item-label-body {
+                                left: 50%;
+                                transform: translateX(-50%);
+                            }
+
+                        }
+
+                        &[data-align="right"] {
+                            .item-label-body {
+                                left: auto;
+                                right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
