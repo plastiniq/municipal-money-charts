@@ -28,7 +28,8 @@ const story = ({ width, smallBreakpoint, dataName, format }) => {
         .format(formatOptions[format])
         .smallBreakpoint(smallBreakpoint)
         .width(width)
-        .seriesOrder(["Amount budgeted", "Transferred up to 2021 Q3", "Spent up to 2021 Q3"])
+        // seriesOrder doesn't support missing data yet
+        // .seriesOrder(["Amount budgeted", "Transferred up to 2021 Q3", "Spent up to 2021 Q3"])
         .node
 }
 
