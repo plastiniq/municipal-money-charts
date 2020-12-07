@@ -1,0 +1,62 @@
+[
+  {
+    "amount": 1,
+    "item": "Only Budget",
+    "phase": "Budget"
+  },
+  {
+    "amount": 2,
+    "item": "Only transferred",
+    "phase": "Transferred"
+  },
+  {
+    "amount": 3,
+    "item": "Only spent",
+    "phase": "Spent"
+  },
+  {
+    "amount": 3,
+    "item": "Budget and transferred",
+    "phase": "Budget"
+  },
+  {
+    "amount": 2.5,
+    "item": "Budget and transferred",
+    "phase": "Transferred"
+  },
+  {
+    "amount": 1,
+    "item": "Budget and spent",
+    "phase": "Budget"
+  },
+  {
+    "amount": 2.5,
+    "item": "Budget and spent",
+    "phase": "Spent"
+  },
+  {
+    "amount": 2.3,
+    "item": "Transferred and spent",
+    "phase": "Transferred"
+  },
+  {
+    "amount": 1.3,
+    "item": "Transferred and spent",
+    "phase": "Spent"
+  },
+  {
+    "amount": null,
+    "item": "Has null value",
+    "phase": "Budget"
+  },
+  {
+    "amount": null,
+    "item": "Has null value",
+    "phase": "Transferred"
+  },
+  {
+    "amount": null,
+    "item": "Has null value",
+    "phase": "Spent"
+  }
+]
