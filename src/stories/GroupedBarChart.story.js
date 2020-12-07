@@ -2,6 +2,8 @@ import GroupedBarChart  from '../components/MunicipalCharts/GroupedBarChart';
 import * as data1 from './data/grouped-bar-chart-1.json';
 import * as data2 from './data/grouped-bar-chart-2.json';
 import * as data3 from './data/grouped-bar-chart-3.json';
+import * as dataMissingValues from './data/grouped-bar-chart-missing-values.json';
+
 const d3Format = require('d3-format')
 
 const chart = new GroupedBarChart()
@@ -9,6 +11,7 @@ const dataOptions = {
     'Data 1 Colored': data1.default,
     'Data 2 Colored': data2.default,
     'Data 3': data3.default,
+    'Data missing values': dataMissingValues.default,
     'Empty Data': []
 }
 
@@ -37,7 +40,7 @@ const story = ({ width, smallBreakpoint, dataName, seriesField, highlight, forma
         .highlight(highlightOptions[highlight])
         .seriesField(seriesFieldOptions[seriesField])
     return chart.node
-} 
+}
 
 story.storyName = "Grouped Bar Chart"
 export default story

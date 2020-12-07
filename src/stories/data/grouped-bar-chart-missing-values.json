@@ -1,71 +1,45 @@
 [
   {
-    "amount": 220000000,
-    "financial_year": "2015-16",
-    "budget_phase": "Original budget",
-    "color": "aquamarine"
-  },
-  {
-    "amount": 230000000,
-    "financial_year": "2015-16",
-    "budget_phase": "Adjusted budget",
-    "color": "burlywood"
-  },
-  {
-    "amount": 325000000,
-    "financial_year": "2015-16",
-    "budget_phase": "Audited outcome"
-  },
-  {
     "amount": 330000000,
     "financial_year": "2016-17",
     "budget_phase": "Original budget",
-    "color": "aquamarine"
-  },
-  {
-    "amount": 3320000000,
-    "financial_year": "2016-17",
-    "budget_phase": "Adjusted budget",
-    "color": "burlywood"
+    "color": "#91B8C5"
   },
   {
     "amount": 335000000,
     "financial_year": "2016-17",
-    "budget_phase": "Audited outcome"
+    "budget_phase": "Audited outcome",
+    "color": "#54298B"
   },
   {
     "amount": 340000000,
     "financial_year": "2017-18",
     "budget_phase": "Original budget",
-    "color": "aquamarine"
+    "color": "#91B8C5"
   },
   {
     "amount": 330000000,
     "financial_year": "2017-18",
     "budget_phase": "Adjusted budget",
-    "color": "burlywood"
-  },
-  {
-    "amount": 325000000,
-    "financial_year": "2017-18",
-    "budget_phase": "Audited outcome"
+    "color": "#23728B"
   },
   {
     "amount": 350000000,
     "financial_year": "2018-19",
     "budget_phase": "Original budget",
-    "color": "aquamarine"
+    "color": "#91B8C5"
   },
   {
     "amount": 350000000,
     "financial_year": "2018-19",
     "budget_phase": "Adjusted budget",
-    "color": "burlywood"
+    "color": "#23728B"
   },
   {
     "amount": 350000000,
     "financial_year": "2018-19",
-    "budget_phase": "Audited outcome"
+    "budget_phase": "Audited outcome",
+    "color": "#54298B"
   },
   {
     "amount": 355000000,
