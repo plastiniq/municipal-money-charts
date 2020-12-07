@@ -10,15 +10,17 @@ export default class MunicipalChart {
       target.appendChild(this._node)
     }
     
-    this._node.className = this.toKebabCase(this.constructor.name)
+    this._node.className = `municipal-chart ${ this.toKebabCase(this.constructor.name) }`
     this._data = []
     this._format = d3.format('')
     this._width = 'auto'
     this._smallBreakpoint = 600
+    this._small = false
 
     const resizeObserver = new ResizeObserver(() => {
-      d3.select(this._node).classed('small', this._smallBreakpoint >= this._node.offsetWidth)
+      this.updateSizeClass()
     })
+  
     resizeObserver.observe(this._node)
     this.updateSizeClass()
   }
@@ -47,6 +49,7 @@ export default class MunicipalChart {
   }
 
   updateProvider () {
+    // this method should be extended
   }
 
   width (value) {
@@ -70,7 +73,13 @@ export default class MunicipalChart {
   }
 
   updateSizeClass () {
-    d3.select(this._node).classed('small', this._smallBreakpoint > this._node.getBoundingClientRect().width)
+    this._small = this._smallBreakpoint > this._node.getBoundingClientRect().width
+    d3.select(this._node).classed('small', this._small)
+    this.smallTrigger(this._small)
+  }
+
+  smallTrigger (value) {
+    // this method should be extended
   }
 
   format (value){

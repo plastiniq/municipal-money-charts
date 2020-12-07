@@ -1,0 +1,41 @@
+[
+  {
+    "amount": 304331307.0,
+    "item": "Property rates",
+    "color": "red"
+  },
+  {
+    "amount": 113280935.0,
+    "item": "Service Charges",
+    "color": "green"
+  },
+  {
+    "amount": 609214.0,
+    "item": "Rental income",
+    "color": "blue"
+  },
+  {
+    "amount": 50234700.0,
+    "item": "Interest and investments",
+    "color": "black"
+  },
+  {
+    "amount": 21333783.0,
+    "item": "Fines",
+    "color": "yellow"
+  },
+  {
+    "amount": 15792788.0,
+    "item": "Licenses and Permits",
+    "color": "gold"
+  },
+  {
+    "amount": 13400000.0,
+    "item": "Agency services",
+    "color": "grey"
+  },
+  {
+    "amount": 93280935.0,
+    "item": "Other"
+  }
+]

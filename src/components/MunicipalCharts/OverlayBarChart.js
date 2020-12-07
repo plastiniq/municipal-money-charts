@@ -70,6 +70,7 @@ export default class OverlayBarChart extends MunicipalChart {
                 .transition()
                 .duration(500)
                 .style('width', d => `${d.amount / maxBarValue * 100}%`)
+                .style('background-color', d => d.color)
 
               d3.select(this).selectAll('.item-value')
                 .data([d])

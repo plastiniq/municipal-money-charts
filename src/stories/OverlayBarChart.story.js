@@ -2,12 +2,14 @@ import OverlayBarChart  from '../components/MunicipalCharts/OverlayBarChart';
 const d3Format = require('d3-format')
 import * as data1 from './data/overlay-bar-chart-1.json';
 import * as data2 from './data/overlay-bar-chart-2.json';
+import * as dataColors from './data/overlay-bar-chart-colors.json';
 
 const chart = new OverlayBarChart()
 
 const dataOptions = {
     'Data 1': data1.default,
     'Data 2': data2.default,
+    'Data Colored': dataColors.default,
     'Empty Data': []
 }
 
