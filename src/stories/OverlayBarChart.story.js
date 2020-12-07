@@ -3,6 +3,7 @@ const d3Format = require('d3-format')
 import * as data1 from './data/overlay-bar-chart-1.json';
 import * as data2 from './data/overlay-bar-chart-2.json';
 import * as dataColors from './data/overlay-bar-chart-colors.json';
+import * as dataMissing from './data/overlay-bar-chart-missing-data.json';
 
 const chart = new OverlayBarChart()
 
@@ -10,6 +11,7 @@ const dataOptions = {
     'Data 1': data1.default,
     'Data 2': data2.default,
     'Data Colored': dataColors.default,
+    'Data missing': dataMissing.default,
     'Empty Data': []
 }
 
@@ -26,9 +28,12 @@ const formatOptions = {
 const story = ({ width, smallBreakpoint, dataName, format }) => {
     return chart.data(dataOptions[dataName])
         .format(formatOptions[format])
-        .smallBreakpoint(smallBreakpoint).width(width)
+        .smallBreakpoint(smallBreakpoint)
+        .width(width)
+        // seriesOrder doesn't support missing data yet
+        // .seriesOrder(["Amount budgeted", "Transferred up to 2021 Q3", "Spent up to 2021 Q3"])
         .node
-} 
+}
 
 export default story
 

@@ -12,8 +12,8 @@ export default class OverlayBarChart extends MunicipalChart {
   valueResizeHandler () {
     return entries => {
       let maxWidth = entries.reduce((maxWidth, entry) => {
-        let width = (entry.contentBoxSize && entry.contentBoxSize[0] && entry.contentBoxSize[0].inlineSize) || 
-                (entry.contentBoxSize && entry.contentBoxSize.inlineSize) || 
+        let width = (entry.contentBoxSize && entry.contentBoxSize[0] && entry.contentBoxSize[0].inlineSize) ||
+                (entry.contentBoxSize && entry.contentBoxSize.inlineSize) ||
                 entry.contentRect.width
 
         return Math.max(maxWidth, width)
@@ -51,7 +51,7 @@ export default class OverlayBarChart extends MunicipalChart {
             .classed('item-label-body', true)
             .text(d => d.item)
           })
-          
+
         d3.select(this)
           .selectAll('.item-track')
             .data([d])
@@ -66,7 +66,7 @@ export default class OverlayBarChart extends MunicipalChart {
                 .selectAll('.item-bar')
                 .data(d.data)
                 .join(enter => enter.append('div').classed('item-bar', true).style('width', '0%'))
-                .attr('data-tooltip', d => format(d.amount))
+                .attr('data-tooltip', d => d.amount === null ? "Not available" : format(d.amount))
                 .transition()
                 .duration(500)
                 .style('width', d => `${d.amount / maxBarValue * 100}%`)
@@ -80,7 +80,7 @@ export default class OverlayBarChart extends MunicipalChart {
                 .each(function () {
                   valueResizeObserver.observe(this)
                 })
-                .text(format(d.data[0].amount))
+                .text(d.data[0].amount === null ? "Not available" : format(d.data[0].amount))
             })
       })
   }
@@ -117,7 +117,7 @@ export default class OverlayBarChart extends MunicipalChart {
         item.data = this._seriesOrder.map(seriesName => item.data.find(series => (series.phase === seriesName)))
       })
     }
-  
+
     return value
   }
 
