@@ -1,0 +1,16 @@
+[
+  {
+    "amount": 103000000,
+    "label": "Equitable share",
+    "color": "#DDD4E8"
+  },
+  {
+    "amount": 50100000,
+    "label": "National conditional grants"
+  },
+  {
+    "amount": 20000000,
+    "label": "Provincial transfers",
+    "color": "#54298B"
+  }
+]

@@ -74,6 +74,7 @@ export default class PercentageStackedChart extends MunicipalChart {
               .style('opacity', 1)
       })
       .classed('item', true)
+      .style('background-color', d => d.color)
       .transition()
       .duration(transitionDuration)
       .style('flex-grow', d => d.amount / totalAmount)

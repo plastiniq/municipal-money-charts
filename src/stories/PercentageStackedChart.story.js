@@ -4,13 +4,15 @@ import * as data2Items from './data/percentage-bar-chart_2-items.json';
 import * as data2ItemsTiny from './data/percentage-bar-chart_2-items-tiny.json';
 import * as data3Items from './data/percentage-bar-chart_3-items.json';
 import * as data3ItemsTiny from './data/percentage-bar-chart_3-items-tiny.json';
+import * as data3ItemsColors from './data/percentage-bar-chart_3-items-colors.json';
 
 const chart = new PercentageStackedChart()
 const dataOptions = {
     '2 Items': data2Items.default,
     '2 Items Tiny': data2ItemsTiny.default,
     '3 Items': data3Items.default,
-    '3 Items Tiny': data3ItemsTiny.default
+    '3 Items Tiny': data3ItemsTiny.default,
+    '3 Items Colored': data3ItemsColors.default
 }
 
 const mainLabelOptions = {
