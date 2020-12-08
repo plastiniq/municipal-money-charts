@@ -88,14 +88,15 @@
                     position: absolute;
                     left: 0;
 
-                    &:nth-child(1) {
+                    &.bar-main {
                         top: 0;
                         height: 100%;
                         border-radius: 2px;
                         background-color: #54298B;
+                        z-index: 0;
                     }
 
-                    &:nth-child(2), &:nth-child(3) {
+                    &.bar-top, &.bar-bottom {
                         &:before, &:after {
                             white-space: nowrap;
                             display: none;
@@ -125,10 +126,11 @@
                         }
                     }
 
-                    &:nth-child(2) {
+                    &.bar-top {
                         top: 3px;
                         height: 6px;
                         background-color: #A26CE8;
+                        z-index: 1;
 
                         &:before {
                             bottom: calc(100% + 3px);
@@ -140,10 +142,11 @@
                         }
                     }
 
-                    &:nth-child(3) {
+                    &.bar-bottom {
                         bottom: 3px;
                         height: 6px;
                         background-color: #91899C;
+                        z-index: 1;
 
                         &:before {
                             top: calc(100% + 3px);
