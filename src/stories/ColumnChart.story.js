@@ -152,19 +152,19 @@ const story = () => {
                 {
                     "period": "2015-2016",
                     "fillColor": "#34A853",
-                    "value": 1
+                    "value": 20
                 }, {
                     "period": "2016-2017",
                     "fillColor": "#34A853",
-                    "value": 2
+                    "value": 50
                 }, {
                     "period": "2017-2018",
                     "fillColor": "#34A853",
-                    "value": 3
+                    "value": 33
                 }, {
                     "period": "2018-2019",
                     "fillColor": "#34A853",
-                    "value": 4
+                    "value": 10
                 }
             ],
             "resultType": "currency"
@@ -178,19 +178,19 @@ const story = () => {
             {
                 "period": "2015-2016",
                 "fillColor": "#ccc",
-                "value": 2
+                "value": 60
             }, {
                 "period": "2016-2017",
                 "fillColor": "#ccc",
-                "value": 6
+                "value": 100
             }, {
                 "period": "2017-2018",
                 "fillColor": "#ccc",
-                "value": 7
+                "value": 3
             }, {
                 "period": "2018-2019",
                 "fillColor": "#ccc",
-                "value": 8
+                "value": 43
             }
             ],
             "resultType": "currency"
@@ -212,7 +212,7 @@ const story = () => {
                 }, {
                     "period": "2017-2018",
                     "fillColor": "#ccc",
-                    "value": 5
+                    "value": 70
                 }, {
                     "period": "2018-2019",
                     "fillColor": "#ccc",
@@ -280,42 +280,7 @@ const story = () => {
 
     ]
 
-
-    let medians = [
-        {
-            "period": "2015-2016",
-            "value": 2
-        }, {
-            "period": "2016-2017",
-            "value": 4
-        }, {
-            "period": "2017-2018",
-            "value": 3
-        }, {
-            "period": "2018-2019",
-            "value": 8
-        }
-    ]
-
-    let medians2 = [
-        {
-            "period": "2015-2016",
-            "value": 1
-        }, {
-            "period": "2016-2017",
-            "value": -3
-        }, {
-            "period": "2017-2018",
-            "value": -4
-        }, {
-            "period": "2018-2019",
-            "value": 10
-        }
-    ]
-
-  
-
-    let problemMedians1 = [
+    let medians1 = [
         {
             "period": "2015-2016",
             "value": -11.35
@@ -331,7 +296,7 @@ const story = () => {
         }
     ]
 
-    let problemMedians2 = [
+    let medians2 = [
         {
             "period": "2015-2016",
             "value": -23.7
@@ -353,49 +318,51 @@ const story = () => {
 
     let chartContainer = document.createElement('div')
     chartContainer.setAttribute('id', 'compareChart')
-    container.appendChild(chartContainer)
+    container.appendChild(chartContainer);
 
-    // let compareChart = new ColumnChart('#compareChart', muniData)
+    let buttonContainer = document.createElement('div')
+    buttonContainer.setAttribute('id', 'buttonContainer')
+    container.appendChild(buttonContainer);
 
     let generateButton = document.createElement('button')
     generateButton.innerHTML = 'Generate'
     generateButton.addEventListener('click', function() { compareChart = new ColumnChart('#compareChart', muniData) })
-    container.appendChild(generateButton)
+    buttonContainer.appendChild(generateButton)
 
     let button = document.createElement('button')
     button.innerHTML = 'Load Data'
     button.addEventListener('click', function() { compareChart.loadData(comparison) })
-    container.appendChild(button)
+    buttonContainer.appendChild(button)
 
     let swapDataButton = document.createElement('button')
     swapDataButton.innerHTML = 'Swap Data'
     swapDataButton.addEventListener('click', function() { compareChart.loadData(comparison2) })
-    container.appendChild(swapDataButton)
+    buttonContainer.appendChild(swapDataButton)
 
     let removeButton = document.createElement('button')
     removeButton.innerHTML = 'Remove Data'    
     removeButton.addEventListener('click', function() { compareChart.loadData(removeData) })
-    container.appendChild(removeButton)
+    buttonContainer.appendChild(removeButton)
 
     let medianButton = document.createElement('button')
     medianButton.innerHTML = 'Load Medians'
-    medianButton.addEventListener('click', function() { compareChart.loadMedians(problemMedians1) })
-    container.appendChild(medianButton)
+    medianButton.addEventListener('click', function() { compareChart.loadMedians(medians1) })
+    buttonContainer.appendChild(medianButton)
 
     let swapMediansButton = document.createElement('button')
     swapMediansButton.innerHTML = 'Swap Medians'
-    swapMediansButton.addEventListener('click', function() { compareChart.loadMedians(problemMedians2) })
-    container.appendChild(swapMediansButton)
+    swapMediansButton.addEventListener('click', function() { compareChart.loadMedians(medians2) })
+    buttonContainer.appendChild(swapMediansButton)
 
     let removeMediansButton = document.createElement('button')
     removeMediansButton.innerHTML = 'Remove Medians'
     removeMediansButton.addEventListener('click', function() { compareChart.removeMedians() })
-    container.appendChild(removeMediansButton)
+    buttonContainer.appendChild(removeMediansButton)
 
     let highlightButton = document.createElement('button')
     highlightButton.innerHTML = 'Highlight'
     highlightButton.addEventListener('click', function() { compareChart.highlightCol('CPT') })
-    container.appendChild(highlightButton)
+    buttonContainer.appendChild(highlightButton)
 
     return container
 

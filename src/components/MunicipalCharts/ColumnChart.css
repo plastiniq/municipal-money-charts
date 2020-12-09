@@ -1,11 +1,10 @@
 .axis {
-    font: 16px sans-serif;
+    font: 13px sans-serif;
 }
 
 .axis path,
 .axis .tick line, 
 .grid path {
-
     display: none
 }
 
@@ -18,15 +17,24 @@
     fill: rgba(0,0,0,0.5)
 }
 
+
+
 .label.focus {
     opacity: 1
 }
 
+.label {
+    font-size: 12px;
+    opacity: 0
+}
+
+.labelBackground {
+    opacity: 0;
+}
 
 .labelBackground.focus  {
     opacity: 1;
     filter:url(#shadow);
-
 }
 
 

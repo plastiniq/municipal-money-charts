@@ -3,3 +3,22 @@
 * {
     font-family: 'Rubik', sans-serif;
 }
+
+#buttonContainer {
+    text-align: center;
+    margin-top: 3em
+}
+
+#buttonContainer button {
+    margin: 0 0.2em;
+    background: #eee;
+    border: none;
+    padding: 0.5em;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        background: #f8f8f8
+    }
+}
+
