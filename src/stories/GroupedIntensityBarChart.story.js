@@ -6,7 +6,7 @@ const d3Format = require('d3-format')
 
 const chart = new GroupedBarChart()
 const dataOptions = {
-    'Positive and negative': data1.default,
+    'Colored': data1.default,
     'All positive': data2.default,
     'All negative': data3.default
 }
@@ -18,8 +18,9 @@ const formatOptions = {
 
 const highlightOptions = {
     'Empty': '',
-    'Rent Of Facilities And Equipment': 'Rent Of Facilities And Equipment',
-    'Interest Earned - Outstanding Debtors': 'Interest Earned - Outstanding Debtors',
+    'Original to Adjusted budget': 'Original to Adjusted budget',
+    'Original budget to Audited outcome': 'Original budget to Audited outcome',
+    'Interest Earned - Outstanding Debtors': 'Interest Earned - Outstanding Debtors'
 }
 
 const intensityLabelOptions = {
@@ -28,8 +29,8 @@ const intensityLabelOptions = {
 }
 
 const barGroupingOptions = {
-    'comparison': 'comparison',
-    'item': 'item'
+    'item': 'item',
+    'comparison': 'comparison'
 }
 
 

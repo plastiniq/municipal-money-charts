@@ -13,23 +13,29 @@
     top: 0;
     bottom: 0;
 
-    .axis-label {
+    .axis-line {
       position: absolute;
-      display: flex;
+      left: 0;
       top: 0;
       bottom: 0;
-      transform: translateX(-50%);
-      white-space: nowrap;
 
       &:before {
         content: "";
         display: block;
         position: absolute;
-        left: 50%;
+        right: 0;
         top: $axis-label-height;
         bottom: 0;
         width: 1px;
         background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .axis-label {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        transform: translateX(-50%);
+        white-space: nowrap;
       }
     }
   }
@@ -40,6 +46,7 @@
     .table-group {
       display: flex;
       align-items: stretch;
+      transition: opacity 0.3s;
 
       &:not(:last-child) {
         margin-bottom: 12px;
@@ -145,12 +152,16 @@
     .axis {
       left: 0;
 
-      .axis-label {
-        align-items: flex-end;
+      .axis-line {
 
         &::before {
           top: 0;
           bottom: $axis-label-height;
+        }
+
+        .axis-label {
+          top: auto;
+          bottom: 0;
         }
       }
     }
@@ -163,6 +174,16 @@
           width: auto;
           flex-grow: 1;
           margin-bottom: 2px;
+        }
+      }
+    }
+  }
+
+  &.highlight {
+    .table {
+      .table-group {
+        &:not(.highlight) {
+          opacity: 0.1;
         }
       }
     }

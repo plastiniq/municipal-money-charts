@@ -8,7 +8,8 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
 
     d3.select(this.node).call(node => {
       this._axis = node.append('div').classed('axis', true)
-      this._axisLabel =  this._axis.append('div').classed('axis-label', true)
+      this._axisLine = this._axis.append('div').classed('axis-line', true)
+      this._axisLabel =  this._axisLine.append('div').classed('axis-label', true)
       this._table = node.append('div').classed('table', true)
     })
 
@@ -19,6 +20,9 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
 
     this._labelResizeObserver = new ResizeObserver(this.labelResizeHandler())
     this._barResizeObserver = new ResizeObserver(this.barResizeHandler())
+    this._axisObserver = new ResizeObserver(this.axisMoveHandler())
+    this._axisObserver.observe(this._axisLine.node())
+    this._axisObserver.observe(this._axisLabel.node())
   }
 
   labelResizeHandler () {
@@ -34,17 +38,42 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
   }
 
   barResizeHandler () {
-    return function (entries) {
-      for (const entry of entries) {
-          const barWidth = entry.contentRect.width
-          d3.select(entry.target).select('.bar-label').classed('external', function () {
-            return this.clientWidth > barWidth
-          })
-      }
+    const table = this._table
+
+    return function () {
+      table.selectAll('.bar-track').each(function () {
+        const track = d3.select(this)
+        const bar = track.select('.bar')
+
+        bar.select('.bar-label').classed('external', function (d) {
+          return (this.clientWidth > bar.node().clientWidth ) && (
+            d.amount < 0 
+              ? bar.node().offsetLeft > this.clientWidth 
+              : (track.node().offsetWidth - (bar.node().offsetLeft + bar.node().offsetWidth)) > this.clientWidth
+          )
+        })
+      })
+    }
+  }
+
+  axisMoveHandler () {
+    const node = this.node
+    const axisLabel = this._axisLabel
+    const axisLine = this._axisLine
+
+    return function () {
+      const nodeRect = node.getBoundingClientRect()
+      const lineRect = axisLine.node().getBoundingClientRect()
+      const startSpace = lineRect.left - nodeRect.left + lineRect.width
+      const endSpace = nodeRect.left + nodeRect.width - lineRect.left - lineRect.width
+
+      const offset = Math.min(endSpace - axisLabel.node().clientWidth / 2, Math.max(0, axisLabel.node().clientWidth / 2 - startSpace))
+      axisLabel.style('left', `calc(100% + ${offset}px)`)
     }
   }
 
   updateProvider () {
+    const highlightGroup = this._highlight
     const labelResizeObserver = this._labelResizeObserver
     const barResizeObserver = this._barResizeObserver
     const minMaxAmount = this.minMax('amount')
@@ -52,6 +81,7 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
     const transitionDuration = 700
     const intensityLabelField = this._intensityLabelField
     const format = this.format()
+    const barResizeHandler = this.barResizeHandler()
 
     labelResizeObserver.disconnect()
     barResizeObserver.disconnect()
@@ -110,6 +140,9 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
         .style('background-color', d => d.color)
         .style('width', d => `${Math.abs(d.amount) / minMaxAmount.diff * 100}%`)
         .style('left', d => `${(Math.abs(minMaxAmount.min) / minMaxAmount.diff + Math.min(0, d.amount / minMaxAmount.diff)) * 100}%`)
+        .tween('resize', function () {
+          return barResizeHandler
+        })
     }
 
     const updateBarTrack = row => {
@@ -147,13 +180,17 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
       .data(this.groups())
       .join('div')
         .classed('table-group', true)
+        .classed('highlight', d => d.group === highlightGroup)
         .call(updateGroup)
 
-      this._axisLabel
-        .text(this._xAxisLabel)
+      this._axisLine
         .transition()
         .duration(transitionDuration)
-        .style('left', `${Math.abs(minMaxAmount.min) / minMaxAmount.diff * 100}%`)
+        .style('width', `${Math.abs(minMaxAmount.min) / minMaxAmount.diff * 100}%`)
+      
+      this._axisLabel.text(this._xAxisLabel)
+
+      d3.select(this.node).classed('highlight', this._highlight)
   }
 
   highlight (name) {
