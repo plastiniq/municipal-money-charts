@@ -1,0 +1,191 @@
+.grouped-intencity-bar-chart {
+  $label-column-width: 25%;
+  $row-label-gap: 8px;
+  $axis-label-height: 1.2em;
+  font-size: 10px;
+  color: #4C4C4C;
+  position: relative;
+  padding-top: calc(#{$axis-label-height} + 8px);
+
+  .axis {
+    position: absolute;
+    left: $label-column-width;
+    top: 0;
+    bottom: 0;
+
+    .axis-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+
+      &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        right: 0;
+        top: $axis-label-height;
+        bottom: 0;
+        width: 1px;
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .axis-label {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .table {
+    z-index: 1;
+
+    .table-group {
+      display: flex;
+      align-items: stretch;
+      transition: opacity 0.3s;
+
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+
+      .group-label {
+        width: $label-column-width;
+      }
+
+      .group-chart {
+        flex-grow: 1;
+
+        .chart-row {
+          height: 16px;
+          display: flex;
+          align-items: stretch;
+
+          &:not(:last-child) {
+            margin-bottom: 4px;
+          }
+
+          .bar-track {
+            background-color: rgba(0, 0, 0, 0.04);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            flex-grow: 1;
+
+            .bar {
+              position: absolute;
+              top: 0;
+              height: 100%;
+              border-radius: 0 2px 2px 0;
+              background-color: grey;
+
+              .bar-label {
+                position: absolute;
+                left: 100%;
+                top: 0;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                padding: 0 4px;
+                color: #FFFFFF;
+                transform: translateX(-100%);
+                transition-property: transform, left, color;
+                transition-duration: 0.3s;
+
+                &.external {
+                  transform: translateX(0%);
+                  color: #666666;
+                }
+              }
+
+              &.negative {
+                border-radius: 2px 0 0 2px;
+
+                .bar-label {
+                  left: 0;
+                  transform: translateX(0%);
+
+                  &.external {
+                    transform: translateX(-100%);
+                    color: #666666;
+                  }
+                }
+              }
+            }
+          }
+
+          .row-label {
+            padding-left: $row-label-gap + 5px;
+            padding-right: 5px;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-sizing: content-box;
+    
+            &::before {
+              content: "";
+              display: block;
+              position: absolute;
+              left: $row-label-gap;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              border-radius: 2px;
+              background-color: #4C4C4C;
+              z-index: -1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.small {
+    padding-top: 0;
+    padding-bottom: calc(#{$axis-label-height} + 8px);
+
+    .axis {
+      left: 0;
+
+      .axis-line {
+
+        &::before {
+          top: 0;
+          bottom: $axis-label-height;
+        }
+
+        .axis-label {
+          top: auto;
+          bottom: 0;
+        }
+      }
+    }
+
+    .table {
+      .table-group {
+        flex-direction: column;
+
+        .group-label {
+          width: auto;
+          flex-grow: 1;
+          margin-bottom: 2px;
+        }
+      }
+    }
+  }
+
+  &.highlight {
+    .table {
+      .table-group {
+        &:not(.highlight) {
+          opacity: 0.1;
+        }
+      }
+    }
+  }
+}
