@@ -1,10 +1,14 @@
-import GroupedBarChart  from '../components/MunicipalCharts/GroupedIntensityBarChart';
-import * as data1 from './data/grouped-intensity-bar-chart-1.json';
+import GroupedBarChart  from '../components/MunicipalCharts/GroupedIntensityBarChart'
+import * as data1 from './data/grouped-intensity-bar-chart-1.json'
+import * as data2 from './data/grouped-intensity-bar-chart-1-positive.json'
+import * as data3 from './data/grouped-intensity-bar-chart-1-negative.json'
 const d3Format = require('d3-format')
 
 const chart = new GroupedBarChart()
 const dataOptions = {
-    'Data 1': data1.default
+    'Positive and negative': data1.default,
+    'All positive': data2.default,
+    'All negative': data3.default
 }
 
 const formatOptions = {
@@ -87,7 +91,7 @@ story.argTypes = {
     },
     xAxisLabel: {
         control: {
-            type: 'string'
+            type: 'text'
         }
     }
 }
