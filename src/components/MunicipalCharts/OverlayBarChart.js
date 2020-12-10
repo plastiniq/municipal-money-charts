@@ -1,11 +1,13 @@
 import MunicipalChart from './MunicipalChart.js'
 import ResizeObserver from 'resize-observer-polyfill'
+import * as d3 from 'd3'
 
 export default class OverlayBarChart extends MunicipalChart {
   constructor (target) {
     super(target)
     this._seriesOrder = null
     this._seriesField = 'item'
+    this._barClasses = ['main', 'top', 'bottom']
     this._valueResizeObserver = new ResizeObserver(this.valueResizeHandler())
   }
 
@@ -19,18 +21,21 @@ export default class OverlayBarChart extends MunicipalChart {
         return Math.max(maxWidth, width)
       }, 0)
 
-      this.d3.selectAll('.item-value').style('min-width', `${maxWidth}px`)
+      d3.selectAll('.item-value').style('min-width', `${maxWidth}px`)
     }
   }
 
   updateProvider () {
-    const d3 = this.d3
     const valueResizeObserver = this._valueResizeObserver
     const format = this._format
+    const barClasses = this._barClasses
     const items = this.orderData(
         this.groupData(this.data(), this._seriesField)
     )
     const maxBarValue = this.maxBarValue()
+    const mainBarValue = (d) => {
+      return (!d.data[barClasses[0]] || d.data[barClasses[0]].amount === null) ? 'Not available' : format(d.data[barClasses[0]].amount)
+    }
 
     valueResizeObserver.disconnect()
 
@@ -64,8 +69,10 @@ export default class OverlayBarChart extends MunicipalChart {
               .join('div')
               .classed('item-series', true)
                 .selectAll('.item-bar')
-                .data(d.data)
-                .join(enter => enter.append('div').classed('item-bar', true).style('width', '0%'))
+                .data(Object.values(d.data))
+                .join(enter => enter.append('div').style('width', '0%'))
+                .attr('class', d => `bar-${d.className}`)
+                .classed('item-bar', true)
                 .attr('data-tooltip', d => d.amount === null ? "Not available" : format(d.amount))
                 .transition()
                 .duration(500)
@@ -80,7 +87,7 @@ export default class OverlayBarChart extends MunicipalChart {
                 .each(function () {
                   valueResizeObserver.observe(this)
                 })
-                .text(d.data[0].amount === null ? "Not available" : format(d.data[0].amount))
+                .text(mainBarValue)
             })
       })
   }
@@ -108,18 +115,29 @@ export default class OverlayBarChart extends MunicipalChart {
   }
 
   groupData (value, key) {
-    return Array.from(this.d3.group(value, d => d[key]), ([item, data]) => ({ item, data }))
+    return Array.from(d3.group(value, d => d[key]), ([item, data]) => ({ item, data }))
   }
 
-  orderData (value) {
-    if (this._seriesOrder) {
-      value.forEach(item => {
-        item.data = this._seriesOrder.map(seriesName => item.data.find(series => (series.phase === seriesName)))
-      })
+  orderData (groups) {
+    const validItem = (item) => {
+      return !this._seriesOrder || this._seriesOrder.find(name => item.phase === name)
     }
 
-    return value
+    const matchClass = (item, itemIndex) => {
+      const index = this._seriesOrder ? this._seriesOrder.findIndex(name => item.phase === name) : itemIndex
+      return Object.assign({ className: this._barClasses[index] }, item)
+    }
+
+    groups.forEach(group => {
+      const validValues = group.data.filter(validItem)
+      group.data = Object.fromEntries(
+        d3.index(validValues.map(matchClass), d => d.className)
+      )
+    })
+
+    return groups
   }
+
 
   maxBarValue () {
     return this.data().reduce((acc, curr) => Math.max(acc, curr.amount), 0)

@@ -25,13 +25,22 @@ const formatOptions = {
     'default currency': d3Format.format('($.2f')
 }
 
-const story = ({ width, smallBreakpoint, dataName, format }) => {
+const phases = ["Amount budgeted", "Transferred up to 2021 Q3", "Spent up to 2021 Q3"]
+const phasesForMissing = ["Budget", "Transferred", "Spent"]
+
+const orderOptions = {
+    'Not set': null,
+    [phases.join(' -> ')]: phases,
+    [phases.slice().reverse().join(' -> ')]: phases.slice().reverse(),
+    [`${phasesForMissing.join(' -> ')} (for missng data)`]: phasesForMissing
+}
+
+const story = ({ width, smallBreakpoint, dataName, format, order }) => {
     return chart.data(dataOptions[dataName])
         .format(formatOptions[format])
         .smallBreakpoint(smallBreakpoint)
         .width(width)
-        // seriesOrder doesn't support missing data yet
-        // .seriesOrder(["Amount budgeted", "Transferred up to 2021 Q3", "Spent up to 2021 Q3"])
+        .seriesOrder(orderOptions[order])
         .node
 }
 
@@ -61,6 +70,12 @@ story.argTypes = {
             type: 'select',
             options: Object.keys(formatOptions)
         }
+    },
+    order: {
+        control: {
+            type: 'select',
+            options: Object.keys(orderOptions)
+        }
     }
 }
 
@@ -68,5 +83,6 @@ story.args = {
     width: '',
     smallBreakpoint: 300,
     dataName: Object.keys(dataOptions)[0],
-    format: Object.keys(formatOptions)[0]
+    format: Object.keys(formatOptions)[0],
+    order: Object.keys(orderOptions)[0]
 }
