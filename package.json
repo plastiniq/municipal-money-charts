@@ -11,9 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "d3": "6.2.0",
-    "resize-observer-polyfill": "^1.5.1",
     "css-loader": "^5.0.1",
+    "d3": "6.2.0",
+    "d3-axis": "^2.0.0",
+    "d3-format": "^2.0.0",
+    "d3-scale": "^3.2.3",
+    "d3-selection": "^2.0.0",
+    "d3-transition": "^2.0.0",
+    "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.29.0",
     "sass-loader": "^10.0.5",
     "style-loader": "^2.0.0"
