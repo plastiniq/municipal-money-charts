@@ -17,6 +17,7 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
     this._intensityLabelField = 'amount'
     this._barGroupingField = 'comparison'
     this._xAxisLabel = 'Intencity Chart'
+    this._labelFormat = d3.format('')
 
     this._labelResizeObserver = new ResizeObserver(this.labelResizeHandler())
     this._barResizeObserver = new ResizeObserver(this.barResizeHandler())
@@ -81,6 +82,7 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
     const transitionDuration = 700
     const intensityLabelField = this._intensityLabelField
     const format = this.format()
+    const labelFormat = this.labelFormat()
     const barResizeHandler = this.barResizeHandler()
 
     labelResizeObserver.disconnect()
@@ -99,7 +101,7 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
           labelResizeObserver.observe(this)
         })
         .classed('row-label-body', true)
-        .text(d => d[intensityLabelField])
+        .text(d => labelFormat(d[intensityLabelField]))
     }
 
     const updateLabel = row => {
@@ -191,6 +193,16 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
       this._axisLabel.text(this._xAxisLabel)
 
       d3.select(this.node).classed('highlight', this._highlight)
+  }
+
+  labelFormat (value) {
+    if (!arguments.length) {
+      return this._labelFormat
+    }
+
+    this._labelFormat = value
+    this.update()
+    return this
   }
 
   highlight (name) {

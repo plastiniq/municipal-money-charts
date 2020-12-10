@@ -11,9 +11,20 @@ const dataOptions = {
     'All negative': data3.default
 }
 
+const positivePrefix = function (format) {
+    return function (value) {
+        return `${value > 0 ? '+' : ''}${format(value)}`
+    }
+}
+
 const formatOptions = {
-    'short': d3Format.format('.2s'),
-    'full': d3Format.format('')
+    'short': positivePrefix(d3Format.format('.2s')),
+    'full': positivePrefix(d3Format.format(''))
+}
+
+const labelFormatOptions = {
+    '%': positivePrefix(d3Format.format('.0%')),
+    'No format': positivePrefix(d3Format.format(''))
 }
 
 const highlightOptions = {
@@ -34,7 +45,7 @@ const barGroupingOptions = {
 }
 
 
-const story = ({ width, smallBreakpoint, dataName, format, highlight, intensityLabelField, barGroupingField, xAxisLabel }) => {
+const story = ({ width, smallBreakpoint, dataName, format, highlight, intensityLabelField, barGroupingField, xAxisLabel, labelFormat }) => {
     chart.data(dataOptions[dataName])
         .format(formatOptions[format])
         .smallBreakpoint(smallBreakpoint)
@@ -43,6 +54,7 @@ const story = ({ width, smallBreakpoint, dataName, format, highlight, intensityL
         .intensityLabelField(intensityLabelOptions[intensityLabelField])
         .barGroupingField(barGroupingOptions[barGroupingField])
         .xAxisLabel(xAxisLabel)
+        .labelFormat(labelFormatOptions[labelFormat])
     return chart.node
 } 
 
@@ -78,6 +90,12 @@ story.argTypes = {
             options: Object.keys(formatOptions)
         }
     },
+    labelFormat: {
+        control: {
+            type: 'select',
+            options: Object.keys(labelFormatOptions)
+        }
+    },
     intensityLabelField: {
         control: {
             type: 'select',
@@ -103,6 +121,7 @@ story.args = {
     dataName: Object.keys(dataOptions)[0],
     highlight: Object.keys(highlightOptions)[0],
     format: Object.keys(formatOptions)[0],
+    labelFormat: Object.keys(labelFormatOptions)[0],
     intensityLabelField: Object.keys(intensityLabelOptions)[0],
     barGroupingField: Object.keys(barGroupingOptions)[0],
     xAxisLabel: 'Original budget'
