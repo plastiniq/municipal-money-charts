@@ -171,8 +171,8 @@ const story = () => {
         },
         {
         "municipality": {
-            "code": "NmN",
-            "name": "NomNom"
+            "code": "DC12",
+            "name": "Amathole"
         },
         "data": [
             {
@@ -223,8 +223,8 @@ const story = () => {
         },
         {
             "municipality": {
-                "code": "NMB",
-                "name": "Nelson Mandela Bay"
+                "code": "BUF",
+                "name": "Buffalo City"
             },
             "data": [
                 {
@@ -360,9 +360,14 @@ const story = () => {
     buttonContainer.appendChild(removeMediansButton)
 
     let highlightButton = document.createElement('button')
-    highlightButton.innerHTML = 'Highlight'
+    highlightButton.innerHTML = 'Highlight (CPT)'
     highlightButton.addEventListener('click', function() { compareChart.highlightCol('CPT') })
     buttonContainer.appendChild(highlightButton)
+
+    let highlightButton2 = document.createElement('button')
+    highlightButton2.innerHTML = 'Highlight (BUF)'
+    highlightButton2.addEventListener('click', function() { compareChart.highlightCol('BUF') })
+    buttonContainer.appendChild(highlightButton2)
 
     return container
 
