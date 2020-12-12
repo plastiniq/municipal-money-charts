@@ -118,7 +118,7 @@ export default class GroupedBarChart extends MunicipalChart {
                         }
                       })
                   })
-                  .classed('bar tooltip top', true)
+                  .classed('bar chart-tooltip top', true)
                   .attr('data-tooltip', d => format(d.amount))
                   .transition()
                   .style('flex-grow', d => d.amount / compareValue)
