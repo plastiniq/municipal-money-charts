@@ -258,4 +258,11 @@ export default class GroupedIntencityBarChart extends MunicipalChart {
   groups () {
     return Array.from(this.d3.group(this.data(), d => d[this._barGroupingField]), ([group, series]) => ({ group, series }))
   }
+
+  destroy () {
+    this._labelResizeObserver.disconnect()
+    this._barResizeObserver.disconnect()
+    this._axisObserver.disconnect()
+    this.updateProvider = null
+  }
 }

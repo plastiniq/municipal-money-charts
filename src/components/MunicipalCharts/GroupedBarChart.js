@@ -199,4 +199,9 @@ export default class GroupedBarChart extends MunicipalChart {
   groups () {
     return Array.from(this.d3.group(this.data(), d => d[this._groupBars]), ([group, series]) => ({ group, series }))
   }
+
+  destroy () {
+    this._valueResizeObserver.disconnect()
+    this.updateProvider = null
+  }
 }
